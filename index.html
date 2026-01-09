@@ -185,24 +185,43 @@
             font-size: 1.4rem;
             font-weight: 700;
             color: #2c5a1d;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
+        }
+        
+        .entry-pinyin {
+            font-size: 0.85rem;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 8px;
         }
         
         .entry-english {
             font-size: 1.2rem;
             color: #555;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-weight: 600;
         }
         
         .entry-description {
             font-size: 0.95rem;
-            color: #666;
+            color: #444;
             line-height: 1.5;
             background-color: #f9fdf5;
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 8px 8px 0 0;
             border-left: 3px solid #c1e0a9;
+            border-bottom: 1px dashed #d4e7c5;
+        }
+        
+        .entry-description-en {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+            background-color: #f0f7e9;
+            padding: 10px;
+            border-radius: 0 0 8px 8px;
+            border-left: 3px solid #a8d08d;
+            font-style: italic;
         }
         
         footer {
@@ -279,8 +298,9 @@
                 <button class="filter-btn" data-category="resources">资源</button>
                 <button class="filter-btn" data-category="crafting">制作</button>
                 <button class="filter-btn" data-category="combat">战斗</button>
+                <button class="filter-btn" data-category="mechanics">游戏机制</button>
             </div>
-            <input type="text" class="search-box" placeholder="搜索中文或英文词汇...">
+            <input type="text" class="search-box" placeholder="搜索中文、拼音或英文词汇...">
         </div>
         
         <div class="glossary-container" id="glossary-container">
@@ -295,7 +315,7 @@
                 </div>
                 <div class="stat-box">
                     <div>分类数量</div>
-                    <div>12</div>
+                    <div>9</div>
                 </div>
                 <div class="stat-box">
                     <div>最后更新</div>
@@ -308,287 +328,1410 @@
     </div>
 
     <script>
-        // 词汇数据
+        // 词汇数据 - 添加了拼音和英文描述
         const glossaryData = [
             // 工具类
-            { chinese: "锄头", english: "Hoe", category: "tools", icon: "fas fa-dig", description: "用于翻耕土地，准备种植作物的工具。" },
-            { chinese: "喷壶", english: "Watering Can", category: "tools", icon: "fas fa-tint", description: "用于给作物浇水，促进植物生长。" },
-            { chinese: "镰刀", english: "Sickle", category: "tools", icon: "fas fa-cut", description: "用于收割成熟作物或清除杂草的工具。" },
-            { chinese: "斧头", english: "Axe", category: "tools", icon: "fas fa-tree", description: "用于砍伐树木，获取木材的工具。" },
-            { chinese: "锤子", english: "Hammer", category: "tools", icon: "fas fa-hammer", description: "用于敲碎石头或建造建筑的工具。" },
-            { chinese: "剪毛剪", english: "Shears", category: "tools", icon: "fas fa-cut", description: "用于从羊身上剪取羊毛的工具。" },
-            { chinese: "剪草机 / 镰刀", english: "Scythe", category: "tools", icon: "fas fa-leaf", description: "高效收割作物或清除大片杂草的工具。" },
-            { chinese: "十字镐 / 镐", english: "Pickaxe", category: "tools", icon: "fas fa-mountain", description: "用于开采矿石和石头的工具。" },
-            { chinese: "搅拌机 / 混合机", english: "Mixer / Grinder", category: "tools", icon: "fas fa-blender", description: "用于混合或研磨材料的工具。" },
-            { chinese: "工具升级（铜/铁/金/铱）", english: "Tool Upgrades (Copper/Iron/Gold/Iridium)", category: "tools", icon: "fas fa-tools", description: "提升工具效率和耐久度的升级系统。" },
-            { chinese: "修理/维护", english: "Repair / Maintenance", category: "tools", icon: "fas fa-wrench", description: "修复损坏的工具以恢复其功能。" },
-            { chinese: "钓鱼卷轴 / 渔具配件", english: "Fishing Tackle / Lures", category: "tools", icon: "fas fa-fish", description: "用于提高钓鱼成功率的配件和诱饵。" },
+            { 
+                chinese: "锄头", 
+                pinyin: "chú tou",
+                english: "Hoe", 
+                category: "tools", 
+                icon: "fas fa-digging", 
+                description: "用于翻耕土地，准备种植作物的工具。",
+                descriptionEn: "A tool used for tilling soil and preparing it for planting crops."
+            },
+            { 
+                chinese: "喷壶", 
+                pinyin: "pēn hú",
+                english: "Watering Can", 
+                category: "tools", 
+                icon: "fas fa-water", 
+                description: "用于给作物浇水，促进植物生长。",
+                descriptionEn: "Used for watering crops to promote plant growth."
+            },
+            { 
+                chinese: "镰刀", 
+                pinyin: "lián dāo",
+                english: "Sickle", 
+                category: "tools", 
+                icon: "fas fa-cut", 
+                description: "用于收割成熟作物或清除杂草的工具。",
+                descriptionEn: "A tool used for harvesting mature crops or clearing weeds."
+            },
+            { 
+                chinese: "斧头", 
+                pinyin: "fǔ tou",
+                english: "Axe", 
+                category: "tools", 
+                icon: "fas fa-axe", 
+                description: "用于砍伐树木，获取木材的工具。",
+                descriptionEn: "Used for chopping down trees to obtain wood."
+            },
+            { 
+                chinese: "锤子", 
+                pinyin: "chuí zi",
+                english: "Hammer", 
+                category: "tools", 
+                icon: "fas fa-hammer", 
+                description: "用于敲碎石头或建造建筑的工具。",
+                descriptionEn: "A tool used for breaking stones or constructing buildings."
+            },
+            { 
+                chinese: "剪毛剪", 
+                pinyin: "jiǎn máo jiǎn",
+                english: "Shears", 
+                category: "tools", 
+                icon: "fas fa-cut", 
+                description: "用于从羊身上剪取羊毛的工具。",
+                descriptionEn: "Used for shearing wool from sheep."
+            },
+            { 
+                chinese: "剪草机 / 镰刀", 
+                pinyin: "jiǎn cǎo jī / lián dāo",
+                english: "Scythe", 
+                category: "tools", 
+                icon: "fas fa-mower", 
+                description: "高效收割作物或清除大片杂草的工具。",
+                descriptionEn: "An efficient tool for harvesting crops or clearing large areas of weeds."
+            },
+            { 
+                chinese: "十字镐 / 镐", 
+                pinyin: "shí zì gǎo / gǎo",
+                english: "Pickaxe", 
+                category: "tools", 
+                icon: "fas fa-pickaxe", 
+                description: "用于开采矿石和石头的工具。",
+                descriptionEn: "Used for mining ores and stones."
+            },
+            { 
+                chinese: "搅拌机 / 混合机", 
+                pinyin: "jiǎo bàn jī / hùn hé jī",
+                english: "Mixer / Grinder", 
+                category: "tools", 
+                icon: "fas fa-blender", 
+                description: "用于混合或研磨材料的工具。",
+                descriptionEn: "A tool for mixing or grinding materials."
+            },
+            { 
+                chinese: "工具升级（铜/铁/金/铱）", 
+                pinyin: "gōng jù shēng jí (tóng/tiě/jīn/yī)",
+                english: "Tool Upgrades (Copper/Iron/Gold/Iridium)", 
+                category: "tools", 
+                icon: "fas fa-tools", 
+                description: "提升工具效率和耐久度的升级系统。",
+                descriptionEn: "An upgrade system that improves tool efficiency and durability."
+            },
+            { 
+                chinese: "修理/维护", 
+                pinyin: "xiū lǐ / wéi hù",
+                english: "Repair / Maintenance", 
+                category: "tools", 
+                icon: "fas fa-wrench", 
+                description: "修复损坏的工具以恢复其功能。",
+                descriptionEn: "Fixing damaged tools to restore their functionality."
+            },
+            { 
+                chinese: "钓鱼卷轴 / 渔具配件", 
+                pinyin: "diào yú juǎn zhóu / yú jù pèi jiàn",
+                english: "Fishing Tackle / Lures", 
+                category: "tools", 
+                icon: "fas fa-fish", 
+                description: "用于提高钓鱼成功率的配件和诱饵。",
+                descriptionEn: "Accessories and lures used to increase fishing success rate."
+            },
+            { 
+                chinese: "钓鱼竿", 
+                pinyin: "diào yú gān",
+                english: "Fishing Rod", 
+                category: "tools", 
+                icon: "fas fa-fishing-rod", 
+                description: "用于钓鱼的主要工具。",
+                descriptionEn: "The primary tool used for fishing."
+            },
+            { 
+                chinese: "蟹笼", 
+                pinyin: "xiè lóng",
+                english: "Crab Pot", 
+                category: "tools", 
+                icon: "fas fa-crab", 
+                description: "放置在水中捕捉螃蟹和其他水生物的陷阱。",
+                descriptionEn: "A trap placed in water to catch crabs and other aquatic creatures."
+            },
+            { 
+                chinese: "刷子", 
+                pinyin: "shuā zi",
+                english: "Brush", 
+                category: "tools", 
+                icon: "fas fa-brush", 
+                description: "用于清洁和梳理动物毛发，提高动物幸福度。",
+                descriptionEn: "Used for cleaning and grooming animal fur to increase animal happiness."
+            },
             
             // 耕种阶段与活动
-            { chinese: "开垦", english: "Tilling / Plowing", category: "farming", icon: "fas fa-seedling", description: "准备土地以进行种植的第一步。" },
-            { chinese: "播种", english: "Sowing / Planting", category: "farming", icon: "fas fa-seedling", description: "将种子放入已开垦的土地中。" },
-            { chinese: "浇水", english: "Watering", category: "farming", icon: "fas fa-tint", description: "为作物提供水分，促进生长。" },
-            { chinese: "施肥", english: "Fertilizing", category: "farming", icon: "fas fa-prescription-bottle", description: "为土壤添加营养物质以提高作物产量或品质。" },
-            { chinese: "杂草", english: "Weeds", category: "farming", icon: "fas fa-leaf", description: "不需要的植物，会与作物竞争资源。" },
-            { chinese: "收获", english: "Harvesting / Gathering", category: "farming", icon: "fas fa-apple-alt", description: "收集成熟的作物或产品。" },
-            { chinese: "灌溉", english: "Irrigation", category: "farming", icon: "fas fa-water", description: "通过系统化的方式为作物供水。" },
-            { chinese: "轮作", english: "Crop Rotation", category: "farming", icon: "fas fa-sync-alt", description: "在不同季节或年份轮换种植不同作物以保持土壤肥力。" },
+            { 
+                chinese: "开垦", 
+                pinyin: "kāi kěn",
+                english: "Tilling / Plowing", 
+                category: "farming", 
+                icon: "fas fa-tractor", 
+                description: "准备土地以进行种植的第一步。",
+                descriptionEn: "The first step in preparing land for planting."
+            },
+            { 
+                chinese: "播种", 
+                pinyin: "bō zhǒng",
+                english: "Sowing / Planting", 
+                category: "farming", 
+                icon: "fas fa-seedling", 
+                description: "将种子放入已开垦的土地中。",
+                descriptionEn: "Placing seeds into tilled soil."
+            },
+            { 
+                chinese: "浇水", 
+                pinyin: "jiāo shuǐ",
+                english: "Watering", 
+                category: "farming", 
+                icon: "fas fa-tint", 
+                description: "为作物提供水分，促进生长。",
+                descriptionEn: "Providing water to crops to promote growth."
+            },
+            { 
+                chinese: "施肥", 
+                pinyin: "shī féi",
+                english: "Fertilizing", 
+                category: "farming", 
+                icon: "fas fa-prescription-bottle", 
+                description: "为土壤添加营养物质以提高作物产量或品质。",
+                descriptionEn: "Adding nutrients to soil to improve crop yield or quality."
+            },
+            { 
+                chinese: "杂草", 
+                pinyin: "zá cǎo",
+                english: "Weeds", 
+                category: "farming", 
+                icon: "fas fa-leaf", 
+                description: "不需要的植物，会与作物竞争资源。",
+                descriptionEn: "Unwanted plants that compete with crops for resources."
+            },
+            { 
+                chinese: "收获", 
+                pinyin: "shōu huò",
+                english: "Harvesting / Gathering", 
+                category: "farming", 
+                icon: "fas fa-apple-alt", 
+                description: "收集成熟的作物或产品。",
+                descriptionEn: "Collecting mature crops or products."
+            },
+            { 
+                chinese: "灌溉", 
+                pinyin: "guàn gài",
+                english: "Irrigation", 
+                category: "farming", 
+                icon: "fas fa-water", 
+                description: "通过系统化的方式为作物供水。",
+                descriptionEn: "Providing water to crops through a systematic method."
+            },
+            { 
+                chinese: "轮作", 
+                pinyin: "lún zuò",
+                english: "Crop Rotation", 
+                category: "farming", 
+                icon: "fas fa-sync-alt", 
+                description: "在不同季节或年份轮换种植不同作物以保持土壤肥力。",
+                descriptionEn: "Rotating different crops in different seasons or years to maintain soil fertility."
+            },
             
             // 畜牧相关
-            { chinese: "挤奶器", english: "Milker", category: "livestock", icon: "fas fa-wine-bottle", description: "用于从奶牛身上获取牛奶的工具。" },
-            { chinese: "铃铛", english: "Bell", category: "livestock", icon: "fas fa-bell", description: "用于召集牲畜的工具。" },
-            { chinese: "缰绳", english: "Reins", category: "livestock", icon: "fas fa-horse-head", description: "用于控制马匹的工具。" },
-            { chinese: "计步器", english: "Pedometer", category: "livestock", icon: "fas fa-walking", description: "测量动物活动量的设备。" },
-            { chinese: "刷子", english: "Brush", category: "livestock", icon: "fas fa-brush", description: "用于清洁和梳理动物毛发，提高动物幸福度。" },
-            { chinese: "羊毛剪刀", english: "Sheep Shearing Clippers", category: "livestock", icon: "fas fa-cut", description: "专门用于剪取羊毛的工具。" },
-            { chinese: "婴儿摇铃", english: "Babu Rattle", category: "livestock", icon: "fas fa-baby", description: "用于安抚幼畜的玩具。" },
-            { chinese: "牲畜", english: "Livestock", category: "livestock", icon: "fas fa-paw", description: "农场饲养的动物，如牛、羊、鸡等。" },
-            { chinese: "饲料", english: "Fodder / Feed", category: "livestock", icon: "fas fa-wheat-awn", description: "用于喂养动物的食物。" },
-            { chinese: "产出", english: "Produce / Yield", category: "livestock", icon: "fas fa-egg", description: "动物产出的产品，如牛奶、鸡蛋、羊毛等。" },
-            { chinese: "放牧", english: "Grazing / Herding", category: "livestock", icon: "fas fa-cloud-sun", description: "让牲畜在户外吃草的活动。" },
-            { chinese: "马厩", english: "Stable", category: "livestock", icon: "fas fa-horse", description: "饲养马匹的建筑。" },
-            { chinese: "鸡舍", english: "Coop", category: "livestock", icon: "fas fa-kiwi-bird", description: "饲养家禽的建筑。" },
-            { chinese: "牛棚 / 谷仓", english: "Barn", category: "livestock", icon: "fas fa-cow", description: "饲养牛等大型牲畜的建筑。" },
+            { 
+                chinese: "挤奶器", 
+                pinyin: "jǐ nǎi qì",
+                english: "Milker", 
+                category: "livestock", 
+                icon: "fas fa-wine-bottle", 
+                description: "用于从奶牛身上获取牛奶的工具。",
+                descriptionEn: "A tool used to obtain milk from cows."
+            },
+            { 
+                chinese: "铃铛", 
+                pinyin: "líng dang",
+                english: "Bell", 
+                category: "livestock", 
+                icon: "fas fa-bell", 
+                description: "用于召集牲畜的工具。",
+                descriptionEn: "Used for gathering livestock."
+            },
+            { 
+                chinese: "缰绳", 
+                pinyin: "jiāng shéng",
+                english: "Reins", 
+                category: "livestock", 
+                icon: "fas fa-horse-head", 
+                description: "用于控制马匹的工具。",
+                descriptionEn: "Used for controlling horses."
+            },
+            { 
+                chinese: "计步器", 
+                pinyin: "jì bù qì",
+                english: "Pedometer", 
+                category: "livestock", 
+                icon: "fas fa-walking", 
+                description: "测量动物活动量的设备。",
+                descriptionEn: "A device that measures animal activity."
+            },
+            { 
+                chinese: "羊毛剪刀", 
+                pinyin: "yáng máo jiǎn dāo",
+                english: "Sheep Shearing Clippers", 
+                category: "livestock", 
+                icon: "fas fa-cut", 
+                description: "专门用于剪取羊毛的工具。",
+                descriptionEn: "Specialized tools for shearing wool from sheep."
+            },
+            { 
+                chinese: "婴儿摇铃", 
+                pinyin: "yīng ér yáo líng",
+                english: "Babu Rattle", 
+                category: "livestock", 
+                icon: "fas fa-baby", 
+                description: "用于安抚幼畜的玩具。",
+                descriptionEn: "A toy used to soothe young animals."
+            },
+            { 
+                chinese: "牲畜", 
+                pinyin: "shēng chù",
+                english: "Livestock", 
+                category: "livestock", 
+                icon: "fas fa-paw", 
+                description: "农场饲养的动物，如牛、羊、鸡等。",
+                descriptionEn: "Animals raised on a farm, such as cows, sheep, chickens, etc."
+            },
+            { 
+                chinese: "饲料", 
+                pinyin: "sì liào",
+                english: "Fodder / Feed", 
+                category: "livestock", 
+                icon: "fas fa-wheat-awn", 
+                description: "用于喂养动物的食物。",
+                descriptionEn: "Food used for feeding animals."
+            },
+            { 
+                chinese: "产出", 
+                pinyin: "chǎn chū",
+                english: "Produce / Yield", 
+                category: "livestock", 
+                icon: "fas fa-egg", 
+                description: "动物产出的产品，如牛奶、鸡蛋、羊毛等。",
+                descriptionEn: "Products produced by animals, such as milk, eggs, wool, etc."
+            },
+            { 
+                chinese: "放牧", 
+                pinyin: "fàng mù",
+                english: "Grazing / Herding", 
+                category: "livestock", 
+                icon: "fas fa-cloud-sun", 
+                description: "让牲畜在户外吃草的活动。",
+                descriptionEn: "The activity of allowing livestock to graze outdoors."
+            },
+            { 
+                chinese: "马厩", 
+                pinyin: "mǎ jiù",
+                english: "Stable", 
+                category: "livestock", 
+                icon: "fas fa-horse", 
+                description: "饲养马匹的建筑。",
+                descriptionEn: "A building for housing horses."
+            },
+            { 
+                chinese: "鸡舍", 
+                pinyin: "jī shè",
+                english: "Coop", 
+                category: "livestock", 
+                icon: "fas fa-kiwi-bird", 
+                description: "饲养家禽的建筑。",
+                descriptionEn: "A building for housing poultry."
+            },
+            { 
+                chinese: "牛棚 / 谷仓", 
+                pinyin: "niú péng / gǔ cāng",
+                english: "Barn", 
+                category: "livestock", 
+                icon: "fas fa-cow", 
+                description: "饲养牛等大型牲畜的建筑。",
+                descriptionEn: "A building for housing large livestock such as cows."
+            },
             
             // 武器类
-            { chinese: "剑", english: "Sword", category: "combat", icon: "fas fa-sword", description: "近战武器，用于对抗敌人。" },
-            { chinese: "棍棒", english: "Bat", category: "combat", icon: "fas fa-baseball-bat", description: "简单的打击武器。" },
-            { chinese: "匕首", english: "Dagger", category: "combat", icon: "fas fa-dagger", description: "短小轻便的刺击武器。" },
-            { chinese: "弹弓", english: "Slingshot / Sling", category: "combat", icon: "fas fa-slash", description: "远程投掷武器，使用小石子作为弹药。" },
-            { chinese: "棍棒", english: "Club", category: "combat", icon: "fas fa-hammer", description: "重型打击武器。" },
+            { 
+                chinese: "剑", 
+                pinyin: "jiàn",
+                english: "Sword", 
+                category: "combat", 
+                icon: "fas fa-sword", 
+                description: "近战武器，用于对抗敌人。",
+                descriptionEn: "A melee weapon used against enemies."
+            },
+            { 
+                chinese: "棍棒", 
+                pinyin: "gùn bàng",
+                english: "Bat", 
+                category: "combat", 
+                icon: "fas fa-baseball-bat", 
+                description: "简单的打击武器。",
+                descriptionEn: "A simple striking weapon."
+            },
+            { 
+                chinese: "匕首", 
+                pinyin: "bǐ shǒu",
+                english: "Dagger", 
+                category: "combat", 
+                icon: "fas fa-dagger", 
+                description: "短小轻便的刺击武器。",
+                descriptionEn: "A short, lightweight stabbing weapon."
+            },
+            { 
+                chinese: "弹弓", 
+                pinyin: "dàn gōng",
+                english: "Slingshot / Sling", 
+                category: "combat", 
+                icon: "fas fa-slash", 
+                description: "远程投掷武器，使用小石子作为弹药。",
+                descriptionEn: "A ranged throwing weapon that uses small stones as ammunition."
+            },
+            { 
+                chinese: "棍棒", 
+                pinyin: "gùn bàng",
+                english: "Club", 
+                category: "combat", 
+                icon: "fas fa-hammer", 
+                description: "重型打击武器。",
+                descriptionEn: "A heavy striking weapon."
+            },
             
             // 加工设备与匠人建筑
-            { chinese: "熔炉", english: "Furnace", category: "crafting", icon: "fas fa-fire", description: "用于熔炼矿石和金属的设备。" },
-            { chinese: "工坊 / 加工机", english: "Machine / Processing Unit", category: "crafting", icon: "fas fa-industry", description: "用于加工原材料的生产设备。" },
-            { chinese: "蜂箱", english: "Bee House", category: "crafting", icon: "fas fa-bee", description: "饲养蜜蜂以生产蜂蜜的建筑。" },
-            { chinese: "奶酪压榨机", english: "Cheese Press", category: "crafting", icon: "fas fa-cheese", description: "将牛奶加工成奶酪的设备。" },
-            { chinese: "蛋做机 / 蛋加工器", english: "Mayonnaise Machine", category: "crafting", icon: "fas fa-egg", description: "将鸡蛋加工成蛋黄酱的设备。" },
-            { chinese: "腌制罐 / 果酱罐", english: "Preserves Jar / Pickling Jar", category: "crafting", icon: "fas fa-jar", description: "用于腌制蔬菜或制作果酱的容器。" },
-            { chinese: "种子机", english: "Seed Maker", category: "crafting", icon: "fas fa-seedling", description: "将作物加工成种子的设备。" },
-            { chinese: "水晶机", english: "Crystalarium / Gem Refiner", category: "crafting", icon: "fas fa-gem", description: "复制或精炼宝石的设备。" },
-            { chinese: "回收机", english: "Recycler", category: "crafting", icon: "fas fa-recycle", description: "将废料转化为有用材料的设备。" },
-            { chinese: "发酵桶 / 酒窖", english: "Cask / Barrel", category: "crafting", icon: "fas fa-wine-bottle", description: "用于发酵和酿酒的容器。" },
+            { 
+                chinese: "熔炉", 
+                pinyin: "róng lú",
+                english: "Furnace", 
+                category: "crafting", 
+                icon: "fas fa-fire", 
+                description: "用于熔炼矿石和金属的设备。",
+                descriptionEn: "Equipment used for smelting ores and metals."
+            },
+            { 
+                chinese: "工坊 / 加工机", 
+                pinyin: "gōng fáng / jiā gōng jī",
+                english: "Machine / Processing Unit", 
+                category: "crafting", 
+                icon: "fas fa-industry", 
+                description: "用于加工原材料的生产设备。",
+                descriptionEn: "Production equipment used for processing raw materials."
+            },
+            { 
+                chinese: "蜂箱", 
+                pinyin: "fēng xiāng",
+                english: "Bee House", 
+                category: "crafting", 
+                icon: "fas fa-bee", 
+                description: "饲养蜜蜂以生产蜂蜜的建筑。",
+                descriptionEn: "A building for keeping bees to produce honey."
+            },
+            { 
+                chinese: "奶酪压榨机", 
+                pinyin: "nǎi lào yā zhà jī",
+                english: "Cheese Press", 
+                category: "crafting", 
+                icon: "fas fa-cheese", 
+                description: "将牛奶加工成奶酪的设备。",
+                descriptionEn: "Equipment for processing milk into cheese."
+            },
+            { 
+                chinese: "蛋做机 / 蛋加工器", 
+                pinyin: "dàn zuò jī / dàn jiā gōng qì",
+                english: "Mayonnaise Machine", 
+                category: "crafting", 
+                icon: "fas fa-egg", 
+                description: "将鸡蛋加工成蛋黄酱的设备。",
+                descriptionEn: "Equipment for processing eggs into mayonnaise."
+            },
+            { 
+                chinese: "腌制罐 / 果酱罐", 
+                pinyin: "yān zhì guàn / guǒ jiàng guàn",
+                english: "Preserves Jar / Pickling Jar", 
+                category: "crafting", 
+                icon: "fas fa-jar", 
+                description: "用于腌制蔬菜或制作果酱的容器。",
+                descriptionEn: "Containers used for pickling vegetables or making jam."
+            },
+            { 
+                chinese: "种子机", 
+                pinyin: "zhǒng zi jī",
+                english: "Seed Maker", 
+                category: "crafting", 
+                icon: "fas fa-seedling", 
+                description: "将作物加工成种子的设备。",
+                descriptionEn: "Equipment for processing crops into seeds."
+            },
+            { 
+                chinese: "水晶机", 
+                pinyin: "shuǐ jīng jī",
+                english: "Crystalarium / Gem Refiner", 
+                category: "crafting", 
+                icon: "fas fa-gem", 
+                description: "复制或精炼宝石的设备。",
+                descriptionEn: "Equipment for duplicating or refining gems."
+            },
+            { 
+                chinese: "回收机", 
+                pinyin: "huí shōu jī",
+                english: "Recycler", 
+                category: "crafting", 
+                icon: "fas fa-recycle", 
+                description: "将废料转化为有用材料的设备。",
+                descriptionEn: "Equipment that converts waste into useful materials."
+            },
+            { 
+                chinese: "发酵桶 / 酒窖", 
+                pinyin: "fā jiào tǒng / jiǔ jiào",
+                english: "Cask / Barrel", 
+                category: "crafting", 
+                icon: "fas fa-wine-bottle", 
+                description: "用于发酵和酿酒的容器。",
+                descriptionEn: "Containers used for fermentation and brewing."
+            },
             
             // 建筑与设施
-            { chinese: "升级后的鸡舍（豪华鸡舍）", english: "Deluxe Coop / Upgraded Coop", category: "buildings", icon: "fas fa-home", description: "提供更多空间和设施的鸡舍升级版。" },
-            { chinese: "升级后的牛棚 / 豪华牛棚", english: "Deluxe Barn / Big Barn", category: "buildings", icon: "fas fa-warehouse", description: "提供更多空间和设施的牛棚升级版。" },
-            { chinese: "牲畜围栏（木/铁/篱笆）", english: "Fences (Wood/Iron/Stone)", category: "buildings", icon: "fas fa-border-all", description: "用于圈养牲畜的围栏，有不同材质。" },
-            { chinese: "温室", english: "Greenhouse", category: "buildings", icon: "fas fa-temperature-high", description: "允许在任何季节种植作物的建筑。" },
-            { chinese: "社区中心", english: "Community Center", category: "buildings", icon: "fas fa-users", description: "村民聚集和举办活动的场所。" },
-            { chinese: "商贩摊位 / 流动商人", english: "Traveling Cart / Merchant Stall", category: "buildings", icon: "fas fa-shopping-cart", description: "出售稀有商品的移动商店。" },
-            { chinese: "邮箱 / 邮件系统", english: "Mailbox / Mail System", category: "buildings", icon: "fas fa-envelope", description: "接收信件和包裹的系统。" },
-            { chinese: "运货箱 / 出货箱", english: "Shipping Bin", category: "buildings", icon: "fas fa-box", description: "出售农场产品的箱子。" },
-            { chinese: "井 / 供水点", english: "Well / Water Source", category: "buildings", icon: "fas fa-water", description: "提供水源的建筑。" },
-            { chinese: "天桥 / 小径 / 路面", english: "Bridge / Paths", category: "buildings", icon: "fas fa-road", description: "连接不同区域的道路或桥梁。" },
+            { 
+                chinese: "升级后的鸡舍（豪华鸡舍）", 
+                pinyin: "shēng jí hòu de jī shè (háo huá jī shè)",
+                english: "Deluxe Coop / Upgraded Coop", 
+                category: "buildings", 
+                icon: "fas fa-home", 
+                description: "提供更多空间和设施的鸡舍升级版。",
+                descriptionEn: "An upgraded version of the chicken coop with more space and facilities."
+            },
+            { 
+                chinese: "升级后的牛棚 / 豪华牛棚", 
+                pinyin: "shēng jí hòu de niú péng / háo huá niú péng",
+                english: "Deluxe Barn / Big Barn", 
+                category: "buildings", 
+                icon: "fas fa-warehouse", 
+                description: "提供更多空间和设施的牛棚升级版。",
+                descriptionEn: "An upgraded version of the barn with more space and facilities."
+            },
+            { 
+                chinese: "牲畜围栏（木/铁/篱笆）", 
+                pinyin: "shēng chù wéi lán (mù/tiě/lí ba)",
+                english: "Fences (Wood/Iron/Stone)", 
+                category: "buildings", 
+                icon: "fas fa-border-all", 
+                description: "用于圈养牲畜的围栏，有不同材质。",
+                descriptionEn: "Fences for enclosing livestock, available in different materials."
+            },
+            { 
+                chinese: "温室", 
+                pinyin: "wēn shì",
+                english: "Greenhouse", 
+                category: "buildings", 
+                icon: "fas fa-temperature-high", 
+                description: "允许在任何季节种植作物的建筑。",
+                descriptionEn: "A building that allows crops to be grown in any season."
+            },
+            { 
+                chinese: "社区中心", 
+                pinyin: "shè qū zhōng xīn",
+                english: "Community Center", 
+                category: "buildings", 
+                icon: "fas fa-users", 
+                description: "村民聚集和举办活动的场所。",
+                descriptionEn: "A place where villagers gather and hold events."
+            },
+            { 
+                chinese: "商贩摊位 / 流动商人", 
+                pinyin: "shāng fàn tān wèi / liú dòng shāng rén",
+                english: "Traveling Cart / Merchant Stall", 
+                category: "buildings", 
+                icon: "fas fa-shopping-cart", 
+                description: "出售稀有商品的移动商店。",
+                descriptionEn: "A mobile shop that sells rare goods."
+            },
+            { 
+                chinese: "邮箱 / 邮件系统", 
+                pinyin: "yóu xiāng / yóu jiàn xì tǒng",
+                english: "Mailbox / Mail System", 
+                category: "buildings", 
+                icon: "fas fa-envelope", 
+                description: "接收信件和包裹的系统。",
+                descriptionEn: "A system for receiving letters and packages."
+            },
+            { 
+                chinese: "运货箱 / 出货箱", 
+                pinyin: "yùn huò xiāng / chū huò xiāng",
+                english: "Shipping Bin", 
+                category: "buildings", 
+                icon: "fas fa-box", 
+                description: "出售农场产品的箱子。",
+                descriptionEn: "A bin for selling farm products."
+            },
+            { 
+                chinese: "井 / 供水点", 
+                pinyin: "jǐng / gōng shuǐ diǎn",
+                english: "Well / Water Source", 
+                category: "buildings", 
+                icon: "fas fa-water", 
+                description: "提供水源的建筑。",
+                descriptionEn: "A structure that provides a water source."
+            },
+            { 
+                chinese: "天桥 / 小径 / 路面", 
+                pinyin: "tiān qiáo / xiǎo jìng / lù miàn",
+                english: "Bridge / Paths", 
+                category: "buildings", 
+                icon: "fas fa-road", 
+                description: "连接不同区域的道路或桥梁。",
+                descriptionEn: "Paths or bridges connecting different areas."
+            },
             
             // 资源与材料
-            { chinese: "种子", english: "Seeds", category: "resources", icon: "fas fa-seedling", description: "用于种植作物的起始材料。" },
-            { chinese: "矿石", english: "Ore", category: "resources", icon: "fas fa-gem", description: "从矿山中开采的矿物原料。" },
-            { chinese: "堆肥", english: "Compost", category: "resources", icon: "fas fa-recycle", description: "有机物质分解形成的肥料。" },
-            { chinese: "石头", english: "Stone", category: "resources", icon: "fas fa-mountain", description: "常见的建筑材料。" },
-            { chinese: "粘土", english: "Clay", category: "resources", icon: "fas fa-cube", description: "用于制作陶器等物品的材料。" },
-            { chinese: "稻草", english: "Straw", category: "resources", icon: "fas fa-wheat-awn", description: "干燥的植物茎秆，用于动物 bedding。" },
-            { chinese: "铱矿石", english: "Iridium Ore", category: "resources", icon: "fas fa-gem", description: "稀有金属矿石，用于高级工具和升级。" },
-            { chinese: "木材", english: "Lumber / Timber", category: "resources", icon: "fas fa-tree", description: "加工过的木头，用于建筑和制作。" },
-            { chinese: "硬木", english: "Hardwood", category: "resources", icon: "fas fa-tree", description: "坚硬耐用的木材，用于高级建筑。" },
-            { chinese: "橡子", english: "Acorn", category: "resources", icon: "fas fa-seedling", description: "橡树的种子，可以种植成树。" },
-            { chinese: "枫树种子", english: "Maple Seed", category: "resources", icon: "fas fa-seedling", description: "枫树的种子，可以种植成树。" },
-            { chinese: "松果", english: "Pine Cone", category: "resources", icon: "fas fa-seedling", description: "松树的种子，可以种植成树。" },
-            { chinese: "农舍", english: "Farmhouse", category: "buildings", icon: "fas fa-home", description: "玩家的住所，可以升级和扩建。" },
-            { chinese: "仓库 / 谷仓", english: "Silo / Barn", category: "buildings", icon: "fas fa-warehouse", description: "存储饲料和农产品的建筑。" },
-            { chinese: "加工坊", english: "Workshop / Maker Shed", category: "buildings", icon: "fas fa-tools", description: "用于制作和加工物品的工作空间。" },
-            { chinese: "磨坊", english: "Mill", category: "buildings", icon: "fas fa-wind", description: "将小麦磨成面粉的建筑。" },
-            { chinese: "酿造桶", english: "Cask", category: "crafting", icon: "fas fa-wine-bottle", description: "用于酿造酒类和陈化产品的容器。" },
-            { chinese: "腌制罐", english: "Pickle Jar", category: "crafting", icon: "fas fa-jar", description: "用于腌制蔬菜的罐子。" },
-            
-            // 游戏机制与数值
-            { chinese: "每日好运值 / 天气影响", english: "Daily Luck / Weather Effects", category: "mechanics", icon: "fas fa-cloud-sun", description: "影响游戏事件概率的每日随机值。" },
-            { chinese: "季节切换机制", english: "Season Cycle", category: "mechanics", icon: "fas fa-calendar-alt", description: "游戏中的季节变化系统，影响可种植作物和活动。" },
-            { chinese: "持久度 / 工具耐久（若有）", english: "Durability (if applicable)", category: "mechanics", icon: "fas fa-shield-alt", description: "工具和物品的使用寿命。" },
-            { chinese: "经验值（技能升级）", english: "Experience Points (Skill Progression)", category: "mechanics", icon: "fas fa-chart-line", description: "通过活动获得的点数，用于提升技能等级。" },
-            { chinese: "存档 / 多存档管理", english: "Save / Save Slots", category: "mechanics", icon: "fas fa-save", description: "游戏进度保存系统。" },
-            
-            // 战斗、怪物与危险
-            { chinese: "怪物种类（史莱姆、骷髅等）", english: "Monster Types (Slimes, Skeletons, etc.)", category: "combat", icon: "fas fa-ghost", description: "游戏中出现的敌对生物种类。" },
-            { chinese: "头目 / 地下城boss", english: "Bosses / Dungeon Boss", category: "combat", icon: "fas fa-crown", description: "地下城中的强大敌人，通常需要特殊策略击败。" },
-            { chinese: "伤害 / 护甲 / 防御", english: "Damage / Armor / Defense", category: "combat", icon: "fas fa-shield-alt", description: "战斗中的攻击和防御数值系统。" },
-            { chinese: "战利品 / 掉落物", english: "Loot / Drops", category: "combat", icon: "fas fa-coins", description: "击败敌人后获得的物品。" },
-            { chinese: "怪物巢穴 / 生物群落", english: "Monster Den / Biome", category: "combat", icon: "fas fa-mountain", description: "怪物聚集的区域或特定生态环境。" },
-            
-            // 成就、藏品与目标
-            { chinese: "成就 / 奖杯", english: "Achievements / Trophies", category: "mechanics", icon: "fas fa-trophy", description: "完成特定挑战后获得的奖励。" },
-            { chinese: "收藏（博物馆/社区中心）", english: "Collections (Museum / Community Center)", category: "mechanics", icon: "fas fa-collection", description: "收集特定物品以完成博物馆或社区中心展示。" },
-            { chinese: "捐赠 / 拼图包（束/公会包）", english: "Bundles / Donation Packs", category: "mechanics", icon: "fas fa-gift", description: "将特定物品组合捐赠以解锁奖励。" },
-            { chinese: "年度/周度目标", english: "Seasonal/Weekly Goals", category: "mechanics", icon: "fas fa-bullseye", description: "有时间限制的游戏目标。" },
-            
-            // 采集、采矿与钓鱼
-            { chinese: "深处矿层 / 矿井层数", english: "Mine Levels / Depth", category: "resources", icon: "fas fa-layer-group", description: "矿井的不同深度层级，每层有不同资源。" },
-            { chinese: "矿车 / 电梯", english: "Minecart / Elevator", category: "resources", icon: "fas fa-tram", description: "在矿井中快速移动的交通工具。" },
-            { chinese: "宝箱 / 掉落物", english: "Chests / Drops", category: "resources", icon: "fas fa-box-open", description: "在探索过程中发现的容器或物品。" },
-            { chinese: "钓场类型（淡水/海水/地下）", english: "Fishing Locations (Fresh/Salt/Underground)", category: "resources", icon: "fas fa-water", description: "不同类型的钓鱼地点，各有特定鱼类。" },
-            { chinese: "鱼饵 / 渔具升级", english: "Bait / Rod Upgrades", category: "resources", icon: "fas fa-fish", description: "提高钓鱼成功率的消耗品和装备升级。" },
-            { chinese: "稀有鱼 / 传说鱼", english: "Rare Fish / Legendary Fish", category: "resources", icon: "fas fa-fish", description: "难以捕获的特殊鱼类，通常有高价值。" },
-            
-            // 经济、市场与交易
-            { chinese: "市场摊位 / 农贸市场", english: "Market Stall / Farmer's Market", category: "mechanics", icon: "fas fa-store", description: "出售农场产品和购买物品的场所。" },
-            { chinese: "买卖订单 / 交付任务", english: "Orders / Delivery Quests", category: "mechanics", icon: "fas fa-tasks", description: "完成特定物品的交付以获得奖励。" },
-            { chinese: "合同 / 长期供应", english: "Contracts / Bulk Orders", category: "mechanics", icon: "fas fa-file-contract", description: "长期大量供应特定物品的协议。" },
-            { chinese: "物价波动 / 市场供需", english: "Price Fluctuation / Supply & Demand", category: "mechanics", icon: "fas fa-chart-line", description: "商品价格根据市场情况变化的系统。" },
-            { chinese: "库存/仓储上限", english: "Inventory / Storage Cap", category: "mechanics", icon: "fas fa-boxes", description: "玩家可以携带和存储的物品数量限制。" },
-            
-            // 社区、NPC 与活动
-            { chinese: "好感度 / 好友等级", english: "Friendship / Relationship Level", category: "mechanics", icon: "fas fa-heart", description: "与NPC关系亲密度数值，通过互动提升。" },
-            { chinese: "婚礼 / 配偶系统", english: "Marriage / Spouse System", category: "mechanics", icon: "fas fa-ring", description: "与特定NPC结婚并共同生活的游戏机制。" },
-            { chinese: "孩子 / 家庭", english: "Children / Family", category: "mechanics", icon: "fas fa-baby", description: "结婚后可能拥有的子女和家庭扩展。" },
-            { chinese: "节日（例：复活节、葡萄节等）", english: "Festivals (e.g., Egg Festival, Flower Dance)", category: "mechanics", icon: "fas fa-glass-cheers", description: "游戏中定期举办的季节性活动。" },
-            { chinese: "公会 / 协会（例如 Joja）", english: "Faction / Corporation (e.g., Joja)", category: "mechanics", icon: "fas fa-users", description: "游戏中的组织或公司，可能有不同剧情线。" },
-            { chinese: "公告牌 / 委托板", english: "Bulletin Board / Quest Board", category: "mechanics", icon: "fas fa-clipboard-list", description: "接收任务和委托的公告板。" },
+            { 
+                chinese: "种子", 
+                pinyin: "zhǒng zi",
+                english: "Seeds", 
+                category: "resources", 
+                icon: "fas fa-seedling", 
+                description: "用于种植作物的起始材料。",
+                descriptionEn: "Starting materials for planting crops."
+            },
+            { 
+                chinese: "矿石", 
+                pinyin: "kuàng shí",
+                english: "Ore", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "从矿山中开采的矿物原料。",
+                descriptionEn: "Mineral raw materials mined from mines."
+            },
+            { 
+                chinese: "堆肥", 
+                pinyin: "duī féi",
+                english: "Compost", 
+                category: "resources", 
+                icon: "fas fa-recycle", 
+                description: "有机物质分解形成的肥料。",
+                descriptionEn: "Fertilizer formed from decomposed organic matter."
+            },
+            { 
+                chinese: "石头", 
+                pinyin: "shí tou",
+                english: "Stone", 
+                category: "resources", 
+                icon: "fas fa-mountain", 
+                description: "常见的建筑材料。",
+                descriptionEn: "Common building material."
+            },
+            { 
+                chinese: "粘土", 
+                pinyin: "nián tǔ",
+                english: "Clay", 
+                category: "resources", 
+                icon: "fas fa-cube", 
+                description: "用于制作陶器等物品的材料。",
+                descriptionEn: "Material used for making pottery and other items."
+            },
+            { 
+                chinese: "稻草", 
+                pinyin: "dào cǎo",
+                english: "Straw", 
+                category: "resources", 
+                icon: "fas fa-wheat-awn", 
+                description: "干燥的植物茎秆，用于动物 bedding。",
+                descriptionEn: "Dried plant stems used for animal bedding."
+            },
+            { 
+                chinese: "铱矿石", 
+                pinyin: "yī kuàng shí",
+                english: "Iridium Ore", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "稀有金属矿石，用于高级工具和升级。",
+                descriptionEn: "Rare metal ore used for advanced tools and upgrades."
+            },
+            { 
+                chinese: "木材", 
+                pinyin: "mù cái",
+                english: "Lumber / Timber", 
+                category: "resources", 
+                icon: "fas fa-tree", 
+                description: "加工过的木头，用于建筑和制作。",
+                descriptionEn: "Processed wood used for construction and crafting."
+            },
+            { 
+                chinese: "硬木", 
+                pinyin: "yìng mù",
+                english: "Hardwood", 
+                category: "resources", 
+                icon: "fas fa-tree", 
+                description: "坚硬耐用的木材，用于高级建筑。",
+                descriptionEn: "Hard, durable wood used for advanced construction."
+            },
+            { 
+                chinese: "橡子", 
+                pinyin: "xiàng zi",
+                english: "Acorn", 
+                category: "resources", 
+                icon: "fas fa-seedling", 
+                description: "橡树的种子，可以种植成树。",
+                descriptionEn: "Seeds of oak trees that can be planted to grow trees."
+            },
+            { 
+                chinese: "枫树种子", 
+                pinyin: "fēng shù zhǒng zi",
+                english: "Maple Seed", 
+                category: "resources", 
+                icon: "fas fa-seedling", 
+                description: "枫树的种子，可以种植成树。",
+                descriptionEn: "Seeds of maple trees that can be planted to grow trees."
+            },
+            { 
+                chinese: "松果", 
+                pinyin: "sōng guǒ",
+                english: "Pine Cone", 
+                category: "resources", 
+                icon: "fas fa-seedling", 
+                description: "松树的种子，可以种植成树。",
+                descriptionEn: "Seeds of pine trees that can be planted to grow trees."
+            },
             
             // 耕种、采集、收割物质
-            { chinese: "小麦", english: "Wheat", category: "resources", icon: "fas fa-wheat-awn", description: "基础谷物作物，可用于制作面粉。" },
-            { chinese: "玉米", english: "Corn", category: "resources", icon: "fas fa-corn", description: "夏季作物，生长周期较长。" },
-            { chinese: "水稻", english: "Rice", category: "resources", icon: "fas fa-seedling", description: "需在水边生长的谷物作物。" },
-            { chinese: "土豆", english: "Potato", category: "resources", icon: "fas fa-potato", description: "根茎类作物，每株可能产出多个。" },
-            { chinese: "番茄", english: "Tomato", category: "resources", icon: "fas fa-apple-alt", description: "持续结果的作物，成熟后每隔几天可收获。" },
-            { chinese: "蓝莓", english: "Blueberry", category: "resources", icon: "fas fa-apple-alt", description: "夏季灌木作物，每次收获产出多个蓝莓。" },
-            { chinese: "浆果", english: "Berries", category: "resources", icon: "fas fa-apple-alt", description: "各种小型水果的统称。" },
-            { chinese: "蘑菇", english: "Mushrooms", category: "resources", icon: "fas fa-fungus", description: "在洞穴或森林中采集的菌类。" },
-            { chinese: "野草莓", english: "Wild Strawberries", category: "resources", icon: "fas fa-apple-alt", description: "春季在野外采集的草莓。" },
-            { chinese: "树液", english: "Sap", category: "resources", icon: "fas fa-tree", description: "从树上采集的粘稠液体，用于制作。" },
-            { chinese: "蜂蜜", english: "Honey", category: "resources", icon: "fas fa-honey-pot", description: "蜜蜂采集花蜜制成的天然甜味剂。" },
-            { chinese: "铜矿石", english: "Copper Ore", category: "resources", icon: "fas fa-gem", description: "基础金属矿石，用于制作铜质工具。" },
-            { chinese: "铁矿石", english: "Iron Ore", category: "resources", icon: "fas fa-gem", description: "中级金属矿石，用于制作铁质工具。" },
-            { chinese: "煤炭", english: "Coal", category: "resources", icon: "fas fa-cube", description: "燃料资源，用于熔炼和烹饪。" },
-            { chinese: "宝石", english: "Gems", category: "resources", icon: "fas fa-gem", description: "稀有矿物，可用于送礼或出售。" },
-            { chinese: "金锭", english: "Gold Bar/Ingot", category: "resources", icon: "fas fa-gem", description: "精炼后的黄金，用于高级制作。" },
-            { chinese: "木板", english: "Lumber", category: "resources", icon: "fas fa-tree", description: "加工过的木材，用于建筑和制作。" },
-            { chinese: "纤维", english: "Fiber", category: "resources", icon: "fas fa-leaf", description: "从杂草或特定植物中获取的材料。" },
+            { 
+                chinese: "小麦", 
+                pinyin: "xiǎo mài",
+                english: "Wheat", 
+                category: "resources", 
+                icon: "fas fa-wheat-awn", 
+                description: "基础谷物作物，可用于制作面粉。",
+                descriptionEn: "Basic grain crop that can be used to make flour."
+            },
+            { 
+                chinese: "玉米", 
+                pinyin: "yù mǐ",
+                english: "Corn", 
+                category: "resources", 
+                icon: "fas fa-corn", 
+                description: "夏季作物，生长周期较长。",
+                descriptionEn: "Summer crop with a longer growth cycle."
+            },
+            { 
+                chinese: "水稻", 
+                pinyin: "shuǐ dào",
+                english: "Rice", 
+                category: "resources", 
+                icon: "fas fa-seedling", 
+                description: "需在水边生长的谷物作物。",
+                descriptionEn: "Grain crop that needs to grow near water."
+            },
+            { 
+                chinese: "土豆", 
+                pinyin: "tǔ dòu",
+                english: "Potato", 
+                category: "resources", 
+                icon: "fas fa-potato", 
+                description: "根茎类作物，每株可能产出多个。",
+                descriptionEn: "Root crop that may produce multiple potatoes per plant."
+            },
+            { 
+                chinese: "番茄", 
+                pinyin: "fān qié",
+                english: "Tomato", 
+                category: "resources", 
+                icon: "fas fa-apple-alt", 
+                description: "持续结果的作物，成熟后每隔几天可收获。",
+                descriptionEn: "A crop that continues to produce fruit, harvestable every few days after maturity."
+            },
+            { 
+                chinese: "蓝莓", 
+                pinyin: "lán méi",
+                english: "Blueberry", 
+                category: "resources", 
+                icon: "fas fa-apple-alt", 
+                description: "夏季灌木作物，每次收获产出多个蓝莓。",
+                descriptionEn: "Summer shrub crop that produces multiple blueberries per harvest."
+            },
+            { 
+                chinese: "浆果", 
+                pinyin: "jiāng guǒ",
+                english: "Berries", 
+                category: "resources", 
+                icon: "fas fa-apple-alt", 
+                description: "各种小型水果的统称。",
+                descriptionEn: "General term for various small fruits."
+            },
+            { 
+                chinese: "蘑菇", 
+                pinyin: "mó gu",
+                english: "Mushrooms", 
+                category: "resources", 
+                icon: "fas fa-fungus", 
+                description: "在洞穴或森林中采集的菌类。",
+                descriptionEn: "Fungi collected in caves or forests."
+            },
+            { 
+                chinese: "野草莓", 
+                pinyin: "yě cǎo méi",
+                english: "Wild Strawberries", 
+                category: "resources", 
+                icon: "fas fa-apple-alt", 
+                description: "春季在野外采集的草莓。",
+                descriptionEn: "Strawberries collected in the wild during spring."
+            },
+            { 
+                chinese: "树液", 
+                pinyin: "shù yè",
+                english: "Sap", 
+                category: "resources", 
+                icon: "fas fa-tree", 
+                description: "从树上采集的粘稠液体，用于制作。",
+                descriptionEn: "Thick liquid collected from trees, used for crafting."
+            },
+            { 
+                chinese: "蜂蜜", 
+                pinyin: "fēng mì",
+                english: "Honey", 
+                category: "resources", 
+                icon: "fas fa-honey-pot", 
+                description: "蜜蜂采集花蜜制成的天然甜味剂。",
+                descriptionEn: "Natural sweetener made by bees from flower nectar."
+            },
+            { 
+                chinese: "铜矿石", 
+                pinyin: "tóng kuàng shí",
+                english: "Copper Ore", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "基础金属矿石，用于制作铜质工具。",
+                descriptionEn: "Basic metal ore used for making copper tools."
+            },
+            { 
+                chinese: "铁矿石", 
+                pinyin: "tiě kuàng shí",
+                english: "Iron Ore", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "中级金属矿石，用于制作铁质工具。",
+                descriptionEn: "Intermediate metal ore used for making iron tools."
+            },
+            { 
+                chinese: "煤炭", 
+                pinyin: "méi tàn",
+                english: "Coal", 
+                category: "resources", 
+                icon: "fas fa-cube", 
+                description: "燃料资源，用于熔炼和烹饪。",
+                descriptionEn: "Fuel resource used for smelting and cooking."
+            },
+            { 
+                chinese: "宝石", 
+                pinyin: "bǎo shí",
+                english: "Gems", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "稀有矿物，可用于送礼或出售。",
+                descriptionEn: "Rare minerals that can be used as gifts or sold."
+            },
+            { 
+                chinese: "金锭", 
+                pinyin: "jīn dìng",
+                english: "Gold Bar/Ingot", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "精炼后的黄金，用于高级制作。",
+                descriptionEn: "Refined gold used for advanced crafting."
+            },
+            { 
+                chinese: "木板", 
+                pinyin: "mù bǎn",
+                english: "Lumber", 
+                category: "resources", 
+                icon: "fas fa-tree", 
+                description: "加工过的木材，用于建筑和制作。",
+                descriptionEn: "Processed wood used for construction and crafting."
+            },
+            { 
+                chinese: "纤维", 
+                pinyin: "xiān wéi",
+                english: "Fiber", 
+                category: "resources", 
+                icon: "fas fa-leaf", 
+                description: "从杂草或特定植物中获取的材料。",
+                descriptionEn: "Material obtained from weeds or specific plants."
+            },
             
             // 动物与产品
-            { chinese: "牛", english: "Cow", category: "livestock", icon: "fas fa-cow", description: "产奶的大型牲畜。" },
-            { chinese: "羊", english: "Sheep", category: "livestock", icon: "fas fa-sheep", description: "产羊毛的牲畜。" },
-            { chinese: "鸡", english: "Chicken", category: "livestock", icon: "fas fa-kiwi-bird", description: "产蛋的家禽。" },
-            { chinese: "鸭", english: "Duck", category: "livestock", icon: "fas fa-feather-alt", description: "产蛋和鸭毛的水禽。" },
-            { chinese: "猪", english: "Pig", category: "livestock", icon: "fas fa-piggy-bank", description: "能够寻找松露的牲畜。" },
-            { chinese: "牛奶", english: "Milk", category: "resources", icon: "fas fa-wine-bottle", description: "从奶牛身上获取的乳制品。" },
-            { chinese: "鸡蛋", english: "Eggs", category: "resources", icon: "fas fa-egg", description: "从鸡或鸭身上获取的蛋类产品。" },
-            { chinese: "羊毛", english: "Wool", category: "resources", icon: "fas fa-tshirt", description: "从羊身上剪取的毛发，用于制作布料。" },
-            { chinese: "鸭毛", english: "Duck Feather", category: "resources", icon: "fas fa-feather-alt", description: "从鸭身上获得的羽毛。" },
-            { chinese: "松露", english: "Truffle", category: "resources", icon: "fas fa-gem", description: "猪在户外放牧时发现的珍贵菌类。" },
-            { chinese: "围栏", english: "Fences", category: "buildings", icon: "fas fa-border-all", description: "用于限制动物活动范围的屏障。" },
+            { 
+                chinese: "牛", 
+                pinyin: "niú",
+                english: "Cow", 
+                category: "livestock", 
+                icon: "fas fa-cow", 
+                description: "产奶的大型牲畜。",
+                descriptionEn: "Large livestock that produces milk."
+            },
+            { 
+                chinese: "羊", 
+                pinyin: "yáng",
+                english: "Sheep", 
+                category: "livestock", 
+                icon: "fas fa-sheep", 
+                description: "产羊毛的牲畜。",
+                descriptionEn: "Livestock that produces wool."
+            },
+            { 
+                chinese: "鸡", 
+                pinyin: "jī",
+                english: "Chicken", 
+                category: "livestock", 
+                icon: "fas fa-kiwi-bird", 
+                description: "产蛋的家禽。",
+                descriptionEn: "Poultry that produces eggs."
+            },
+            { 
+                chinese: "鸭", 
+                pinyin: "yā",
+                english: "Duck", 
+                category: "livestock", 
+                icon: "fas fa-feather-alt", 
+                description: "产蛋和鸭毛的水禽。",
+                descriptionEn: "Waterfowl that produces eggs and feathers."
+            },
+            { 
+                chinese: "猪", 
+                pinyin: "zhū",
+                english: "Pig", 
+                category: "livestock", 
+                icon: "fas fa-piggy-bank", 
+                description: "能够寻找松露的牲畜。",
+                descriptionEn: "Livestock capable of finding truffles."
+            },
+            { 
+                chinese: "牛奶", 
+                pinyin: "niú nǎi",
+                english: "Milk", 
+                category: "resources", 
+                icon: "fas fa-wine-bottle", 
+                description: "从奶牛身上获取的乳制品。",
+                descriptionEn: "Dairy product obtained from cows."
+            },
+            { 
+                chinese: "鸡蛋", 
+                pinyin: "jī dàn",
+                english: "Eggs", 
+                category: "resources", 
+                icon: "fas fa-egg", 
+                description: "从鸡或鸭身上获取的蛋类产品。",
+                descriptionEn: "Egg products obtained from chickens or ducks."
+            },
+            { 
+                chinese: "羊毛", 
+                pinyin: "yáng máo",
+                english: "Wool", 
+                category: "resources", 
+                icon: "fas fa-tshirt", 
+                description: "从羊身上剪取的毛发，用于制作布料。",
+                descriptionEn: "Hair sheared from sheep, used for making fabric."
+            },
+            { 
+                chinese: "鸭毛", 
+                pinyin: "yā máo",
+                english: "Duck Feather", 
+                category: "resources", 
+                icon: "fas fa-feather-alt", 
+                description: "从鸭身上获得的羽毛。",
+                descriptionEn: "Feathers obtained from ducks."
+            },
+            { 
+                chinese: "松露", 
+                pinyin: "sōng lù",
+                english: "Truffle", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "猪在户外放牧时发现的珍贵菌类。",
+                descriptionEn: "Precious fungi found by pigs when grazing outdoors."
+            },
             
             // 游戏机制与系统
-            { chinese: "耕种技能", english: "Farming Skill", category: "mechanics", icon: "fas fa-tractor", description: "通过耕种活动提升的技能，解锁相关配方。" },
-            { chinese: "采集技能", english: "Foraging Skill", category: "mechanics", icon: "fas fa-leaf", description: "通过采集野外资源提升的技能。" },
-            { chinese: "钓鱼技能", english: "Fishing Skill", category: "mechanics", icon: "fas fa-fish", description: "通过钓鱼活动提升的技能。" },
-            { chinese: "采矿技能", english: "Mining Skill", category: "mechanics", icon: "fas fa-mountain", description: "通过采矿活动提升的技能。" },
-            { chinese: "精力 / 体力", english: "Energy / Stamina", category: "mechanics", icon: "fas fa-battery-full", description: "进行活动消耗的能量值，需要休息或进食恢复。" },
-            { chinese: "生命值", english: "Health Points", category: "mechanics", icon: "fas fa-heart", description: "角色的健康值，受到伤害时会减少。" },
-            { chinese: "金币", english: "Coins", category: "mechanics", icon: "fas fa-coins", description: "游戏中的主要货币。" },
-            { chinese: "升级工具", english: "Tool Upgrades", category: "mechanics", icon: "fas fa-tools", description: "使用资源和金钱提升工具等级。" },
-            { chinese: "制作", english: "Crafting", category: "mechanics", icon: "fas fa-hammer", description: "使用材料制作物品的系统。" },
-            { chinese: "食谱", english: "Recipes", category: "mechanics", icon: "fas fa-book-open", description: "制作食物或物品的配方。" },
-            { chinese: "蓝图", english: "Blueprints", category: "mechanics", icon: "fas fa-map", description: "建造建筑或制作复杂物品的图纸。" },
-            { chinese: "送礼", english: "Gifting", category: "mechanics", icon: "fas fa-gift", description: "向NPC赠送物品以提升好感度的行为。" },
-            { chinese: "友好度", english: "Friendship Level", category: "mechanics", icon: "fas fa-heart", description: "与NPC关系的量化等级。" },
-            { chinese: "非玩家角色", english: "NPC (Non-Player Character)", category: "mechanics", icon: "fas fa-user", description: "游戏中由计算机控制的角色。" },
+            { 
+                chinese: "耕种技能", 
+                pinyin: "gēng zhòng jì néng",
+                english: "Farming Skill", 
+                category: "mechanics", 
+                icon: "fas fa-tractor", 
+                description: "通过耕种活动提升的技能，解锁相关配方。",
+                descriptionEn: "Skill improved through farming activities, unlocking related recipes."
+            },
+            { 
+                chinese: "采集技能", 
+                pinyin: "cǎi jí jì néng",
+                english: "Foraging Skill", 
+                category: "mechanics", 
+                icon: "fas fa-leaf", 
+                description: "通过采集野外资源提升的技能。",
+                descriptionEn: "Skill improved through foraging wild resources."
+            },
+            { 
+                chinese: "钓鱼技能", 
+                pinyin: "diào yú jì néng",
+                english: "Fishing Skill", 
+                category: "mechanics", 
+                icon: "fas fa-fish", 
+                description: "通过钓鱼活动提升的技能。",
+                descriptionEn: "Skill improved through fishing activities."
+            },
+            { 
+                chinese: "采矿技能", 
+                pinyin: "cǎi kuàng jì néng",
+                english: "Mining Skill", 
+                category: "mechanics", 
+                icon: "fas fa-mountain", 
+                description: "通过采矿活动提升的技能。",
+                descriptionEn: "Skill improved through mining activities."
+            },
+            { 
+                chinese: "精力 / 体力", 
+                pinyin: "jīng lì / tǐ lì",
+                english: "Energy / Stamina", 
+                category: "mechanics", 
+                icon: "fas fa-battery-full", 
+                description: "进行活动消耗的能量值，需要休息或进食恢复。",
+                descriptionEn: "Energy value consumed during activities, restored by resting or eating."
+            },
+            { 
+                chinese: "生命值", 
+                pinyin: "shēng mìng zhí",
+                english: "Health Points", 
+                category: "mechanics", 
+                icon: "fas fa-heart", 
+                description: "角色的健康值，受到伤害时会减少。",
+                descriptionEn: "Character's health value, decreases when taking damage."
+            },
+            { 
+                chinese: "金币", 
+                pinyin: "jīn bì",
+                english: "Coins", 
+                category: "mechanics", 
+                icon: "fas fa-coins", 
+                description: "游戏中的主要货币。",
+                descriptionEn: "The main currency in the game."
+            },
+            { 
+                chinese: "升级工具", 
+                pinyin: "shēng jí gōng jù",
+                english: "Tool Upgrades", 
+                category: "mechanics", 
+                icon: "fas fa-tools", 
+                description: "使用资源和金钱提升工具等级。",
+                descriptionEn: "Using resources and money to upgrade tool levels."
+            },
+            { 
+                chinese: "制作", 
+                pinyin: "zhì zuò",
+                english: "Crafting", 
+                category: "mechanics", 
+                icon: "fas fa-hammer", 
+                description: "使用材料制作物品的系统。",
+                descriptionEn: "System for creating items using materials."
+            },
+            { 
+                chinese: "食谱", 
+                pinyin: "shí pǔ",
+                english: "Recipes", 
+                category: "mechanics", 
+                icon: "fas fa-book-open", 
+                description: "制作食物或物品的配方。",
+                descriptionEn: "Formulas for creating food or items."
+            },
+            { 
+                chinese: "蓝图", 
+                pinyin: "lán tú",
+                english: "Blueprints", 
+                category: "mechanics", 
+                icon: "fas fa-map", 
+                description: "建造建筑或制作复杂物品的图纸。",
+                descriptionEn: "Plans for constructing buildings or creating complex items."
+            },
+            { 
+                chinese: "送礼", 
+                pinyin: "sòng lǐ",
+                english: "Gifting", 
+                category: "mechanics", 
+                icon: "fas fa-gift", 
+                description: "向NPC赠送物品以提升好感度的行为。",
+                descriptionEn: "The act of giving items to NPCs to increase friendship."
+            },
+            { 
+                chinese: "友好度", 
+                pinyin: "yǒu hǎo dù",
+                english: "Friendship Level", 
+                category: "mechanics", 
+                icon: "fas fa-heart", 
+                description: "与NPC关系的量化等级。",
+                descriptionEn: "Quantified level of relationship with NPCs."
+            },
+            { 
+                chinese: "非玩家角色", 
+                pinyin: "fēi wán jiā jué sè",
+                english: "NPC (Non-Player Character)", 
+                category: "mechanics", 
+                icon: "fas fa-user", 
+                description: "游戏中由计算机控制的角色。",
+                descriptionEn: "Characters controlled by the computer in the game."
+            },
+            { 
+                chinese: "星级 / 品质", 
+                pinyin: "xīng jí / pǐn zhì",
+                english: "Quality / Star Rating", 
+                category: "mechanics", 
+                icon: "fas fa-star", 
+                description: "物品的品质等级，影响售价和效果。",
+                descriptionEn: "Quality rating of items, affecting selling price and effects."
+            },
+            { 
+                chinese: "利润", 
+                pinyin: "lì rùn",
+                english: "Profit", 
+                category: "mechanics", 
+                icon: "fas fa-money-bill-wave", 
+                description: "销售收入减去成本后的收益。",
+                descriptionEn: "Earnings after subtracting costs from sales revenue."
+            },
+            { 
+                chinese: "任务 / 委托", 
+                pinyin: "rèn wù / wěi tuō",
+                english: "Quests / Commissions", 
+                category: "mechanics", 
+                icon: "fas fa-tasks", 
+                description: "游戏中的目标或任务，完成可获得奖励。",
+                descriptionEn: "Objectives or tasks in the game that provide rewards upon completion."
+            },
+            { 
+                chinese: "季节", 
+                pinyin: "jì jié",
+                english: "Seasons", 
+                category: "mechanics", 
+                icon: "fas fa-calendar-alt", 
+                description: "游戏中的时间周期，影响可进行的活动。",
+                descriptionEn: "Time cycles in the game that affect available activities."
+            },
             
             // 原材料与矿物数据库 - 金属与矿石
-            { chinese: "奥利哈钢矿石", english: "Orichalcum Ore", category: "resources", icon: "fas fa-gem", description: "神话中的金属矿石，用于高级制作。" },
-            { chinese: "精金矿石", english: "Adamantite Ore", category: "resources", icon: "fas fa-gem", description: "极其坚硬的金属矿石。" },
-            { chinese: "石料", english: "Material Stone", category: "resources", icon: "fas fa-cube", description: "建筑用的石材。" },
-            { chinese: "铁", english: "Iron", category: "resources", icon: "fas fa-gem", description: "常见金属，用于制作工具和建筑。" },
-            { chinese: "铜", english: "Bronze", category: "resources", icon: "fas fa-gem", description: "铜合金，比纯铜更坚固。" },
-            { chinese: "银", english: "Silver", category: "resources", icon: "fas fa-gem", description: "贵金属，用于高级物品。" },
-            { chinese: "金", english: "Gold", category: "resources", icon: "fas fa-gem", description: "贵金属，用于高级工具和装饰。" },
-            { chinese: "钛", english: "Titanium", category: "resources", icon: "fas fa-gem", description: "高强度轻质金属。" },
-            { chinese: "铂 (白金)", english: "Platinum", category: "resources", icon: "fas fa-gem", description: "稀有贵金属，价值高于黄金。" },
-            { chinese: "大马士革钢", english: "Damascus Steel", category: "resources", icon: "fas fa-gem", description: "花纹钢材，用于制作高级武器。" },
-            { chinese: "奥利哈钢", english: "Orichalcum", category: "resources", icon: "fas fa-gem", description: "精炼后的奥利哈钢金属。" },
-            { chinese: "精金", english: "Adamantite", category: "resources", icon: "fas fa-gem", description: "精炼后的精金金属。" },
-            { chinese: "绿水镍矿", english: "Jamborite", category: "resources", icon: "fas fa-gem", description: "绿色的镍矿石。" },
-            { chinese: "铁铅矿", english: "Jagoite", category: "resources", icon: "fas fa-gem", description: "含铁和铅的矿石。" },
-            { chinese: "黄铁矿", english: "Pyrite", category: "resources", icon: "fas fa-gem", description: "又称愚人金，外观类似黄金的矿石。" },
+            { 
+                chinese: "奥利哈钢矿石", 
+                pinyin: "ào lì hā gāng kuàng shí",
+                english: "Orichalcum Ore", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "神话中的金属矿石，用于高级制作。",
+                descriptionEn: "Mythical metal ore used for advanced crafting."
+            },
+            { 
+                chinese: "精金矿石", 
+                pinyin: "jīng jīn kuàng shí",
+                english: "Adamantite Ore", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "极其坚硬的金属矿石。",
+                descriptionEn: "Extremely hard metal ore."
+            },
+            { 
+                chinese: "铁", 
+                pinyin: "tiě",
+                english: "Iron", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "常见金属，用于制作工具和建筑。",
+                descriptionEn: "Common metal used for making tools and buildings."
+            },
+            { 
+                chinese: "铜", 
+                pinyin: "tóng",
+                english: "Bronze", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "铜合金，比纯铜更坚固。",
+                descriptionEn: "Copper alloy, stronger than pure copper."
+            },
+            { 
+                chinese: "银", 
+                pinyin: "yín",
+                english: "Silver", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "贵金属，用于高级物品。",
+                descriptionEn: "Precious metal used for advanced items."
+            },
+            { 
+                chinese: "金", 
+                pinyin: "jīn",
+                english: "Gold", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "贵金属，用于高级工具和装饰。",
+                descriptionEn: "Precious metal used for advanced tools and decorations."
+            },
+            { 
+                chinese: "钛", 
+                pinyin: "tài",
+                english: "Titanium", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "高强度轻质金属。",
+                descriptionEn: "High-strength, lightweight metal."
+            },
+            { 
+                chinese: "铂 (白金)", 
+                pinyin: "bó (bái jīn)",
+                english: "Platinum", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "稀有贵金属，价值高于黄金。",
+                descriptionEn: "Rare precious metal, more valuable than gold."
+            },
+            { 
+                chinese: "大马士革钢", 
+                pinyin: "dà mǎ shì gé gāng",
+                english: "Damascus Steel", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "花纹钢材，用于制作高级武器。",
+                descriptionEn: "Patterned steel used for making advanced weapons."
+            },
+            { 
+                chinese: "黄铁矿", 
+                pinyin: "huáng tiě kuàng",
+                english: "Pyrite", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "又称愚人金，外观类似黄金的矿石。",
+                descriptionEn: "Also known as fool's gold, an ore that looks similar to gold."
+            },
             
             // 宝石与晶体
-            { chinese: "玻璃", english: "Glass Gemstone", category: "resources", icon: "fas fa-gem", description: "人造宝石材料。" },
-            { chinese: "玛瑙", english: "Agate Gemstone", category: "resources", icon: "fas fa-gem", description: "条纹状半宝石。" },
-            { chinese: "翡翠", english: "Jade Gemstone", category: "resources", icon: "fas fa-gem", description: "绿色的珍贵宝石。" },
-            { chinese: "水晶", english: "Crystal Gemstone", category: "resources", icon: "fas fa-gem", description: "透明的石英晶体。" },
-            { chinese: "紫水晶", english: "Amethyst Gemstone", category: "resources", icon: "fas fa-gem", description: "紫色的石英变种。" },
-            { chinese: "石榴石", english: "Garnet Gemstone", category: "resources", icon: "fas fa-gem", description: "深红色宝石。" },
-            { chinese: "月长石", english: "Moonstone Gemstone", category: "resources", icon: "fas fa-gem", description: "有月光般光泽的宝石。" },
-            { chinese: "黄玉", english: "Topaz Gemstone", category: "resources", icon: "fas fa-gem", description: "多种颜色的宝石。" },
-            { chinese: "欧泊", english: "Opal Gemstone", category: "resources", icon: "fas fa-gem", description: "有彩虹色变彩的宝石。" },
-            { chinese: "海蓝宝石", english: "Aquamarine", category: "resources", icon: "fas fa-gem", description: "淡蓝色的绿柱石变种。" },
-            { chinese: "祖母绿", english: "Emerald Gemstone", category: "resources", icon: "fas fa-gem", description: "绿色的珍贵宝石。" },
-            { chinese: "蓝宝石", english: "Sapphire Gemstone", category: "resources", icon: "fas fa-gem", description: "蓝色的刚玉宝石。" },
-            { chinese: "红宝石", english: "Ruby Gemstone", category: "resources", icon: "fas fa-gem", description: "红色的刚玉宝石。" },
-            { chinese: "钻石", english: "Diamond Gemstone", category: "resources", icon: "fas fa-gem", description: "最坚硬的天然矿物。" },
-            { chinese: "坦桑石", english: "Tanzanite Gemstone", category: "resources", icon: "fas fa-gem", description: "蓝紫色的稀有宝石。" },
-            { chinese: "碧玺", english: "Tourmaline", category: "resources", icon: "fas fa-gem", description: "有多种颜色的宝石。" },
-            { chinese: "亚历山大石", english: "Alexandrite", category: "resources", icon: "fas fa-gem", description: "变色效应显著的稀有宝石。" },
-            { chinese: "虎眼石", english: "Tiger's Eye", category: "resources", icon: "fas fa-gem", description: "有猫眼效应的石英变种。" },
-            { chinese: "猫眼石（欧泊）", english: "Opal", category: "resources", icon: "fas fa-gem", description: "有猫眼效应的宝石。" },
-            { chinese: "赤红猫眼石", english: "Fire Opal", category: "resources", icon: "fas fa-gem", description: "橙红色调的欧泊。" },
-            { chinese: "透闪石", english: "Tremolite", category: "resources", icon: "fas fa-gem", description: "钙镁硅酸盐矿物。" },
-            { chinese: "重晶石", english: "Baryte / Barite", category: "resources", icon: "fas fa-gem", description: "硫酸钡矿物。" },
-            { chinese: "方解石", english: "Calcite", category: "resources", icon: "fas fa-gem", description: "碳酸钙矿物。" },
-            { chinese: "白云石", english: "Dolomite", category: "resources", icon: "fas fa-gem", description: "钙镁碳酸盐矿物。" },
-            { chinese: "硅钙石", english: "Esperite", category: "resources", icon: "fas fa-gem", description: "铅锌硅酸盐矿物。" },
-            { chinese: "氟磷灰石", english: "Fluorapatite", category: "resources", icon: "fas fa-gem", description: "磷酸盐矿物。" },
-            { chinese: "日光榴石", english: "Helvite", category: "resources", icon: "fas fa-gem", description: "铍锰硅酸盐矿物。" },
-            { chinese: "蓝晶石", english: "Kyanite", category: "resources", icon: "fas fa-gem", description: "蓝色硅酸盐矿物。" },
-            { chinese: "孔雀石", english: "Malachite", category: "resources", icon: "fas fa-gem", description: "绿色碳酸铜矿物。" },
-            { chinese: "柱星叶石", english: "Neptunite", category: "resources", icon: "fas fa-gem", description: "黑色硅酸盐矿物。" },
-            { chinese: "雌黄", english: "Orpiment", category: "resources", icon: "fas fa-gem", description: "橙黄色砷硫化物矿物。" },
-            { chinese: "碧玉", english: "Jasper", category: "resources", icon: "fas fa-gem", description: "不透明的石英变种。" },
-            { chinese: "天青石", english: "Celestine", category: "resources", icon: "fas fa-gem", description: "天蓝色硫酸锶矿物。" },
-            { chinese: "黑曜石", english: "Obsidian", category: "resources", icon: "fas fa-gem", description: "火山玻璃。" },
-            { chinese: "青泥石", english: "Aerinite", category: "resources", icon: "fas fa-gem", description: "蓝色硅酸盐矿物。" },
-            { chinese: "新硅钙石", english: "Nekoite", category: "resources", icon: "fas fa-gem", description: "白色硅酸盐矿物。" },
-            { chinese: "晶洞（雷公蛋）", english: "Thunder Egg", category: "resources", icon: "fas fa-gem", description: "内部有水晶的球形岩石。" },
-            { chinese: "海洋碧玉（海洋石）", english: "Ocean Jasper（Ocean Stone）", category: "resources", icon: "fas fa-gem", description: "多彩的碧玉变种。" },
-            { chinese: "黄方解石（柠檬石）", english: "Yellow Calcite（Lemon Stone）", category: "resources", icon: "fas fa-gem", description: "黄色的方解石变种。" },
+            { 
+                chinese: "玻璃", 
+                pinyin: "bō li",
+                english: "Glass Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "人造宝石材料。",
+                descriptionEn: "Artificial gemstone material."
+            },
+            { 
+                chinese: "玛瑙", 
+                pinyin: "mǎ nǎo",
+                english: "Agate Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "条纹状半宝石。",
+                descriptionEn: "Striped semi-precious stone."
+            },
+            { 
+                chinese: "翡翠", 
+                pinyin: "fěi cuì",
+                english: "Jade Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "绿色的珍贵宝石。",
+                descriptionEn: "Green precious stone."
+            },
+            { 
+                chinese: "水晶", 
+                pinyin: "shuǐ jīng",
+                english: "Crystal Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "透明的石英晶体。",
+                descriptionEn: "Transparent quartz crystal."
+            },
+            { 
+                chinese: "紫水晶", 
+                pinyin: "zǐ shuǐ jīng",
+                english: "Amethyst Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "紫色的石英变种。",
+                descriptionEn: "Purple variety of quartz."
+            },
+            { 
+                chinese: "石榴石", 
+                pinyin: "shí liú shí",
+                english: "Garnet Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "深红色宝石。",
+                descriptionEn: "Deep red gemstone."
+            },
+            { 
+                chinese: "月长石", 
+                pinyin: "yuè cháng shí",
+                english: "Moonstone Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "有月光般光泽的宝石。",
+                descriptionEn: "Gemstone with a moon-like glow."
+            },
+            { 
+                chinese: "黄玉", 
+                pinyin: "huáng yù",
+                english: "Topaz Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "多种颜色的宝石。",
+                descriptionEn: "Gemstone available in various colors."
+            },
+            { 
+                chinese: "欧泊", 
+                pinyin: "ōu pò",
+                english: "Opal Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "有彩虹色变彩的宝石。",
+                descriptionEn: "Gemstone with rainbow-like color play."
+            },
+            { 
+                chinese: "海蓝宝石", 
+                pinyin: "hǎi lán bǎo shí",
+                english: "Aquamarine", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "淡蓝色的绿柱石变种。",
+                descriptionEn: "Light blue variety of beryl."
+            },
+            { 
+                chinese: "祖母绿", 
+                pinyin: "zǔ mǔ lǜ",
+                english: "Emerald Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "绿色的珍贵宝石。",
+                descriptionEn: "Green precious gemstone."
+            },
+            { 
+                chinese: "蓝宝石", 
+                pinyin: "lán bǎo shí",
+                english: "Sapphire Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "蓝色的刚玉宝石。",
+                descriptionEn: "Blue corundum gemstone."
+            },
+            { 
+                chinese: "红宝石", 
+                pinyin: "hóng bǎo shí",
+                english: "Ruby Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "红色的刚玉宝石。",
+                descriptionEn: "Red corundum gemstone."
+            },
+            { 
+                chinese: "钻石", 
+                pinyin: "zuàn shí",
+                english: "Diamond Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "最坚硬的天然矿物。",
+                descriptionEn: "The hardest natural mineral."
+            },
+            { 
+                chinese: "坦桑石", 
+                pinyin: "tǎn sāng shí",
+                english: "Tanzanite Gemstone", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "蓝紫色的稀有宝石。",
+                descriptionEn: "Blue-purple rare gemstone."
+            },
+            { 
+                chinese: "碧玺", 
+                pinyin: "bì xǐ",
+                english: "Tourmaline", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "有多种颜色的宝石。",
+                descriptionEn: "Gemstone available in many colors."
+            },
+            { 
+                chinese: "亚历山大石", 
+                pinyin: "yà lì shān dà shí",
+                english: "Alexandrite", 
+                category: "resources", 
+                icon: "fas fa-gem", 
+                description: "变色效应显著的稀有宝石。",
+                descriptionEn: "Rare gemstone with significant color-changing effects."
+            },
             
-            // 加工后的宝石
-            { chinese: "泥石", english: "Mudstone", category: "resources", icon: "fas fa-gem", description: "细粒沉积岩。" },
-            { chinese: "沙岩", english: "Sandstone", category: "resources", icon: "fas fa-gem", description: "砂粒胶结形成的岩石。" },
-            { chinese: "石灰石", english: "Limestone", category: "resources", icon: "fas fa-gem", description: "碳酸钙沉积岩。" },
-            { chinese: "板岩", english: "Slate", category: "resources", icon: "fas fa-gem", description: "易裂成薄片的变质岩。" },
-            { chinese: "皂石", english: "Soapstone", category: "resources", icon: "fas fa-gem", description: "柔软的滑石岩。" },
-            { chinese: "玄武岩", english: "Basalt", category: "resources", icon: "fas fa-gem", description: "暗色火山岩。" },
-            { chinese: "花岗岩", english: "Granite", category: "resources", icon: "fas fa-gem", description: "粗粒火成岩。" },
-            { chinese: "大理石", english: "Marble", category: "resources", icon: "fas fa-gem", description: "变质石灰岩。" },
-            { chinese: "赤铁矿", english: "Hematite", category: "resources", icon: "fas fa-gem", description: "铁氧化物矿物。" },
-            { chinese: "玻璃", english: "Glass", category: "resources", icon: "fas fa-gem", description: "人造透明材料。" },
-            { chinese: "玛瑙", english: "Agate", category: "resources", icon: "fas fa-gem", description: "条纹状玉髓。" },
-            { chinese: "水晶", english: "Crystal", category: "resources", icon: "fas fa-gem", description: "透明的石英。" },
-            { chinese: "黄水晶", english: "Citrine", category: "resources", icon: "fas fa-gem", description: "黄色的石英变种。" },
-            { chinese: "紫水晶", english: "Amethyst", category: "resources", icon: "fas fa-gem", description: "紫色的石英。" },
-            { chinese: "石榴石", english: "Garnet", category: "resources", icon: "fas fa-gem", description: "硅酸盐矿物群。" },
-            { chinese: "月长石", english: "Moonstone", category: "resources", icon: "fas fa-gem", description: "长石族矿物。" },
-            { chinese: "黄玉", english: "Topaz", category: "resources", icon: "fas fa-gem", description: "硅酸盐矿物。" },
-            { chinese: "欧泊（猫眼石）", english: "Opal", category: "resources", icon: "fas fa-gem", description: "含水二氧化硅。" },
-            { chinese: "海蓝宝石", english: "Aquamarine", category: "resources", icon: "fas fa-gem", description: "淡蓝色绿柱石。" },
-            { chinese: "祖母绿", english: "Emerald", category: "resources", icon: "fas fa-gem", description: "绿色绿柱石。" },
-            { chinese: "蓝宝石", english: "Sapphire", category: "resources", icon: "fas fa-gem", description: "蓝色刚玉。" },
-            { chinese: "红宝石", english: "Ruby", category: "resources", icon: "fas fa-gem", description: "红色刚玉。" },
-            { chinese: "钻石", english: "Diamond", category: "resources", icon: "fas fa-gem", description: "碳的结晶形式。" },
-            { chinese: "坦桑石", english: "Tanzanite", category: "resources", icon: "fas fa-gem", description: "蓝紫色黝帘石。" },
-            { chinese: "帕拉伊巴碧玺", english: "Paraiba Tourmaline", category: "resources", icon: "fas fa-gem", description: "霓虹蓝色的稀有碧玺。" },
-            { chinese: "亚历山大变石", english: "Alexandrite", category: "resources", icon: "fas fa-gem", description: "变色金绿宝石。" },
-            
-            // 钓鱼相关
-            { chinese: "钓鱼竿", english: "Fishing Rod", category: "tools", icon: "fas fa-fishing-rod", description: "用于钓鱼的主要工具。" },
-            { chinese: "蟹笼", english: "Crab Pot", category: "tools", icon: "fas fa-crab", description: "放置在水中捕捉螃蟹和其他水生物的陷阱。" },
-            
-            // 游戏机制与系统补充
-            { chinese: "星级 / 品质", english: "Quality / Star Rating", category: "mechanics", icon: "fas fa-star", description: "物品的品质等级，影响售价和效果。" },
-            { chinese: "利润", english: "Profit", category: "mechanics", icon: "fas fa-money-bill-wave", description: "销售收入减去成本后的收益。" },
-            { chinese: "任务 / 委托", english: "Quests / Commissions", category: "mechanics", icon: "fas fa-tasks", description: "游戏中的目标或任务，完成可获得奖励。" },
-            { chinese: "季节", english: "Seasons", category: "mechanics", icon: "fas fa-calendar-alt", description: "游戏中的时间周期，影响可进行的活动。" },
-            { chinese: "耐久度 / 体力", english: "Durability / Stamina", category: "mechanics", icon: "fas fa-battery-three-quarters", description: "工具耐久度和角色体力的统称。" }
+            // 从原文档添加的其他重要词汇
+            { 
+                chinese: "每日好运值 / 天气影响", 
+                pinyin: "měi rì hǎo yùn zhí / tiān qì yǐng xiǎng",
+                english: "Daily Luck / Weather Effects", 
+                category: "mechanics", 
+                icon: "fas fa-cloud-sun", 
+                description: "影响游戏事件概率的每日随机值。",
+                descriptionEn: "Daily random value that affects the probability of game events."
+            },
+            { 
+                chinese: "季节切换机制", 
+                pinyin: "jì jié qiē huàn jī zhì",
+                english: "Season Cycle", 
+                category: "mechanics", 
+                icon: "fas fa-calendar-alt", 
+                description: "游戏中的季节变化系统，影响可种植作物和活动。",
+                descriptionEn: "Seasonal change system in the game that affects plantable crops and activities."
+            },
+            { 
+                chinese: "持久度 / 工具耐久（若有）", 
+                pinyin: "chí jiǔ dù / gōng jù nài jiǔ (ruò yǒu)",
+                english: "Durability (if applicable)", 
+                category: "mechanics", 
+                icon: "fas fa-shield-alt", 
+                description: "工具和物品的使用寿命。",
+                descriptionEn: "The lifespan of tools and items."
+            },
+            { 
+                chinese: "经验值（技能升级）", 
+                pinyin: "jīng yàn zhí (jì néng shēng jí)",
+                english: "Experience Points (Skill Progression)", 
+                category: "mechanics", 
+                icon: "fas fa-chart-line", 
+                description: "通过活动获得的点数，用于提升技能等级。",
+                descriptionEn: "Points earned through activities, used to increase skill levels."
+            },
+            { 
+                chinese: "存档 / 多存档管理", 
+                pinyin: "cún dàng / duō cún dàng guǎn lǐ",
+                english: "Save / Save Slots", 
+                category: "mechanics", 
+                icon: "fas fa-save", 
+                description: "游戏进度保存系统。",
+                descriptionEn: "Game progress save system."
+            },
+            { 
+                chinese: "怪物种类（史莱姆、骷髅等）", 
+                pinyin: "guài wù zhǒng lèi (shǐ lái mǔ, kū lóu děng)",
+                english: "Monster Types (Slimes, Skeletons, etc.)", 
+                category: "combat", 
+                icon: "fas fa-ghost", 
+                description: "游戏中出现的敌对生物种类。",
+                descriptionEn: "Types of hostile creatures that appear in the game."
+            },
+            { 
+                chinese: "头目 / 地下城boss", 
+                pinyin: "tóu mù / dì xià chéng boss",
+                english: "Bosses / Dungeon Boss", 
+                category: "combat", 
+                icon: "fas fa-crown", 
+                description: "地下城中的强大敌人，通常需要特殊策略击败。",
+                descriptionEn: "Powerful enemies in dungeons that usually require special strategies to defeat."
+            }
         ];
 
         // 类别映射到图标和标题
@@ -639,8 +1782,10 @@
                     const term = searchTerm.toLowerCase();
                     filteredData = filteredData.filter(entry => 
                         entry.chinese.toLowerCase().includes(term) || 
+                        entry.pinyin.toLowerCase().includes(term) ||
                         entry.english.toLowerCase().includes(term) ||
-                        entry.description.toLowerCase().includes(term)
+                        entry.description.toLowerCase().includes(term) ||
+                        entry.descriptionEn.toLowerCase().includes(term)
                     );
                 }
                 
@@ -701,16 +1846,20 @@
                 
                 // 高亮搜索词
                 let highlightedChinese = entry.chinese;
+                let highlightedPinyin = entry.pinyin;
                 let highlightedEnglish = entry.english;
                 let highlightedDescription = entry.description;
+                let highlightedDescriptionEn = entry.descriptionEn;
                 
                 if (searchTerm) {
                     const term = searchTerm.toLowerCase();
                     const regex = new RegExp(`(${term})`, 'gi');
                     
                     highlightedChinese = entry.chinese.replace(regex, '<span class="highlight">$1</span>');
+                    highlightedPinyin = entry.pinyin.replace(regex, '<span class="highlight">$1</span>');
                     highlightedEnglish = entry.english.replace(regex, '<span class="highlight">$1</span>');
                     highlightedDescription = entry.description.replace(regex, '<span class="highlight">$1</span>');
+                    highlightedDescriptionEn = entry.descriptionEn.replace(regex, '<span class="highlight">$1</span>');
                 }
                 
                 card.innerHTML = `
@@ -719,8 +1868,10 @@
                     </div>
                     <div class="entry-content">
                         <div class="entry-chinese">${highlightedChinese}</div>
+                        <div class="entry-pinyin">${highlightedPinyin}</div>
                         <div class="entry-english">${highlightedEnglish}</div>
                         <div class="entry-description">${highlightedDescription}</div>
+                        <div class="entry-description-en">${highlightedDescriptionEn}</div>
                     </div>
                 `;
                 
