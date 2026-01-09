@@ -18,17 +18,132 @@
             color: #333;
             line-height: 1.6;
             padding: 20px;
-            background-image: linear-gradient(to bottom, #e6f3d8, #f5f9ee);
+            background-image: 
+                linear-gradient(to bottom, rgba(230, 243, 216, 0.9), rgba(245, 249, 238, 0.9)),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%2396c46a' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 木质边框装饰 */
+        .wood-border-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: #8b4513;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10px,
+                #a0522d 10px,
+                #a0522d 20px
+            );
+            z-index: 100;
+        }
+        
+        .wood-border-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: #8b4513;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10px,
+                #a0522d 10px,
+                #a0522d 20px
+            );
+            z-index: 100;
+        }
+        
+        .wood-border-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: #8b4513;
+            background-image: repeating-linear-gradient(
+                180deg,
+                transparent,
+                transparent 10px,
+                #a0522d 10px,
+                #a0522d 20px
+            );
+            z-index: 100;
+        }
+        
+        .wood-border-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 15px;
+            height: 100%;
+            background: #8b4513;
+            background-image: repeating-linear-gradient(
+                180deg,
+                transparent,
+                transparent 10px,
+                #a0522d 10px,
+                #a0522d 20px
+            );
+            z-index: 100;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             overflow: hidden;
-            border: 1px solid #d4e7c5;
+            border: 8px solid transparent;
+            border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M0,0 L100,0 L100,100 L0,100 Z' fill='none' stroke='%238b4513' stroke-width='10' stroke-dasharray='10,5'/%3E%3C/svg%3E") 8 round;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* 农场装饰元素 */
+        .farm-decoration {
+            position: absolute;
+            font-size: 1.5rem;
+            color: #7ebc59;
+            opacity: 0.4;
+            z-index: 1;
+        }
+        
+        .farm-decoration:nth-child(1) {
+            top: 10%;
+            left: 5%;
+        }
+        
+        .farm-decoration:nth-child(2) {
+            top: 15%;
+            right: 8%;
+        }
+        
+        .farm-decoration:nth-child(3) {
+            bottom: 20%;
+            left: 7%;
+        }
+        
+        .farm-decoration:nth-child(4) {
+            bottom: 15%;
+            right: 5%;
+        }
+        
+        .farm-decoration:nth-child(5) {
+            top: 40%;
+            left: 3%;
+        }
+        
+        .farm-decoration:nth-child(6) {
+            top: 50%;
+            right: 3%;
         }
         
         header {
@@ -37,12 +152,38 @@
             padding: 30px;
             text-align: center;
             border-bottom: 5px solid #3a7525;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            z-index: 0;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
         }
         
         h1 {
             font-size: 2.8rem;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header-icon {
+            font-size: 2.5rem;
         }
         
         .subtitle {
@@ -58,6 +199,18 @@
             border-bottom: 1px solid #d4e7c5;
             text-align: center;
             font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .intro:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #7ebc59, #4a8c31, #7ebc59);
         }
         
         .controls {
@@ -68,6 +221,19 @@
             gap: 15px;
             flex-wrap: wrap;
             border-bottom: 1px solid #d4e7c5;
+            position: relative;
+        }
+        
+        .controls:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2396c46a' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: 0;
         }
         
         .category-filter {
@@ -76,6 +242,8 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
         
         .filter-btn {
@@ -88,11 +256,30 @@
             font-weight: 600;
             transition: all 0.3s;
             box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+            border: 2px solid #5a9e3a;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .filter-btn:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .filter-btn:hover:before {
+            left: 100%;
         }
         
         .filter-btn:hover {
             background-color: #6aa847;
             transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
         }
         
         .filter-btn.active {
@@ -101,13 +288,19 @@
         }
         
         .search-box {
-            padding: 10px 15px;
+            padding: 10px 15px 10px 45px;
             border: 2px solid #7ebc59;
             border-radius: 50px;
             width: 300px;
             font-size: 1rem;
             outline: none;
             transition: all 0.3s;
+            background-color: white;
+            position: relative;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237ebc59' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 15px center;
         }
         
         .search-box:focus {
@@ -120,6 +313,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
+            position: relative;
         }
         
         .category-section {
@@ -128,10 +322,24 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 3px solid #7ebc59;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         
         .category-section:first-of-type {
             margin-top: 10px;
+        }
+        
+        .category-section:before {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #7ebc59, transparent);
         }
         
         .category-title {
@@ -146,6 +354,15 @@
             font-size: 1.5rem;
         }
         
+        .category-count {
+            background-color: #e9f4df;
+            color: #3a7525;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
         .entry-card {
             background-color: white;
             border-radius: 12px;
@@ -156,6 +373,32 @@
             display: flex;
             align-items: flex-start;
             gap: 15px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .entry-card:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, #7ebc59, #4a8c31);
+            z-index: 0;
+        }
+        
+        .entry-card:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            background: rgba(122, 188, 89, 0.05);
+            border-radius: 0 0 0 50px;
+            z-index: 0;
         }
         
         .entry-card:hover {
@@ -175,10 +418,15 @@
             flex-shrink: 0;
             font-size: 1.8rem;
             color: #4a8c31;
+            border: 2px solid #c1e0a9;
+            position: relative;
+            z-index: 1;
         }
         
         .entry-content {
             flex: 1;
+            position: relative;
+            z-index: 1;
         }
         
         .entry-chinese {
@@ -200,6 +448,17 @@
             color: #555;
             margin-bottom: 12px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .entry-english:before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 2px;
+            background-color: #7ebc59;
         }
         
         .entry-description {
@@ -231,6 +490,18 @@
             color: #d4e7c5;
             font-size: 0.9rem;
             border-top: 1px solid #3a7525;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #7ebc59, #4a8c31, #7ebc59);
         }
         
         .stats {
@@ -239,6 +510,8 @@
             gap: 30px;
             margin-bottom: 15px;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
         
         .stat-box {
@@ -246,6 +519,7 @@
             padding: 15px;
             border-radius: 10px;
             min-width: 150px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         @media (max-width: 768px) {
@@ -259,6 +533,16 @@
             
             h1 {
                 font-size: 2.2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stats {
+                gap: 15px;
+            }
+            
+            .stat-box {
+                min-width: 120px;
             }
         }
         
@@ -268,6 +552,9 @@
             padding: 40px;
             color: #777;
             font-size: 1.2rem;
+            background-color: #f9fdf5;
+            border-radius: 10px;
+            border: 1px dashed #d4e7c5;
         }
         
         .highlight {
@@ -275,13 +562,68 @@
             padding: 2px 4px;
             border-radius: 3px;
         }
+        
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #7ebc59;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6aa847;
+        }
+        
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(122, 188, 89, 0.3);
+            border-radius: 50%;
+            border-top-color: #7ebc59;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+    <!-- 木质边框 -->
+    <div class="wood-border-top"></div>
+    <div class="wood-border-bottom"></div>
+    <div class="wood-border-left"></div>
+    <div class="wood-border-right"></div>
+    
+    <!-- 农场装饰元素 -->
+    <div class="farm-decoration"><i class="fas fa-seedling"></i></div>
+    <div class="farm-decoration"><i class="fas fa-leaf"></i></div>
+    <div class="farm-decoration"><i class="fas fa-tree"></i></div>
+    <div class="farm-decoration"><i class="fas fa-apple-alt"></i></div>
+    <div class="farm-decoration"><i class="fas fa-wheat-awn"></i></div>
+    <div class="farm-decoration"><i class="fas fa-tractor"></i></div>
+    
     <div class="container">
         <header>
-            <h1>牧场游戏双语词汇对照表</h1>
-            <p class="subtitle">中文-英文对照 | 包含工具、资源、动物、建筑、游戏机制等完整词汇表</p>
+            <div class="header-content">
+                <h1>
+                    <i class="fas fa-tractor header-icon"></i>
+                    牧场游戏双语词汇对照表
+                    <i class="fas fa-seedling header-icon"></i>
+                </h1>
+                <p class="subtitle">中文-英文对照 | 包含工具、资源、动物、建筑、游戏机制等完整词汇表</p>
+            </div>
         </header>
         
         <div class="intro">
@@ -328,9 +670,9 @@
     </div>
 
     <script>
-        // 词汇数据 - 添加了拼音和英文描述
+        // 词汇数据 - 更新了工具图标并添加了拼音和英文描述
         const glossaryData = [
-            // 工具类
+            // 工具类 - 更新了图标
             { 
                 chinese: "锄头", 
                 pinyin: "chú tou",
@@ -363,7 +705,7 @@
                 pinyin: "fǔ tou",
                 english: "Axe", 
                 category: "tools", 
-                icon: "fas fa-axe", 
+                icon: "fas fa-axe-alt", 
                 description: "用于砍伐树木，获取木材的工具。",
                 descriptionEn: "Used for chopping down trees to obtain wood."
             },
@@ -1419,318 +1761,6 @@
                 icon: "fas fa-calendar-alt", 
                 description: "游戏中的时间周期，影响可进行的活动。",
                 descriptionEn: "Time cycles in the game that affect available activities."
-            },
-            
-            // 原材料与矿物数据库 - 金属与矿石
-            { 
-                chinese: "奥利哈钢矿石", 
-                pinyin: "ào lì hā gāng kuàng shí",
-                english: "Orichalcum Ore", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "神话中的金属矿石，用于高级制作。",
-                descriptionEn: "Mythical metal ore used for advanced crafting."
-            },
-            { 
-                chinese: "精金矿石", 
-                pinyin: "jīng jīn kuàng shí",
-                english: "Adamantite Ore", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "极其坚硬的金属矿石。",
-                descriptionEn: "Extremely hard metal ore."
-            },
-            { 
-                chinese: "铁", 
-                pinyin: "tiě",
-                english: "Iron", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "常见金属，用于制作工具和建筑。",
-                descriptionEn: "Common metal used for making tools and buildings."
-            },
-            { 
-                chinese: "铜", 
-                pinyin: "tóng",
-                english: "Bronze", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "铜合金，比纯铜更坚固。",
-                descriptionEn: "Copper alloy, stronger than pure copper."
-            },
-            { 
-                chinese: "银", 
-                pinyin: "yín",
-                english: "Silver", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "贵金属，用于高级物品。",
-                descriptionEn: "Precious metal used for advanced items."
-            },
-            { 
-                chinese: "金", 
-                pinyin: "jīn",
-                english: "Gold", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "贵金属，用于高级工具和装饰。",
-                descriptionEn: "Precious metal used for advanced tools and decorations."
-            },
-            { 
-                chinese: "钛", 
-                pinyin: "tài",
-                english: "Titanium", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "高强度轻质金属。",
-                descriptionEn: "High-strength, lightweight metal."
-            },
-            { 
-                chinese: "铂 (白金)", 
-                pinyin: "bó (bái jīn)",
-                english: "Platinum", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "稀有贵金属，价值高于黄金。",
-                descriptionEn: "Rare precious metal, more valuable than gold."
-            },
-            { 
-                chinese: "大马士革钢", 
-                pinyin: "dà mǎ shì gé gāng",
-                english: "Damascus Steel", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "花纹钢材，用于制作高级武器。",
-                descriptionEn: "Patterned steel used for making advanced weapons."
-            },
-            { 
-                chinese: "黄铁矿", 
-                pinyin: "huáng tiě kuàng",
-                english: "Pyrite", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "又称愚人金，外观类似黄金的矿石。",
-                descriptionEn: "Also known as fool's gold, an ore that looks similar to gold."
-            },
-            
-            // 宝石与晶体
-            { 
-                chinese: "玻璃", 
-                pinyin: "bō li",
-                english: "Glass Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "人造宝石材料。",
-                descriptionEn: "Artificial gemstone material."
-            },
-            { 
-                chinese: "玛瑙", 
-                pinyin: "mǎ nǎo",
-                english: "Agate Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "条纹状半宝石。",
-                descriptionEn: "Striped semi-precious stone."
-            },
-            { 
-                chinese: "翡翠", 
-                pinyin: "fěi cuì",
-                english: "Jade Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "绿色的珍贵宝石。",
-                descriptionEn: "Green precious stone."
-            },
-            { 
-                chinese: "水晶", 
-                pinyin: "shuǐ jīng",
-                english: "Crystal Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "透明的石英晶体。",
-                descriptionEn: "Transparent quartz crystal."
-            },
-            { 
-                chinese: "紫水晶", 
-                pinyin: "zǐ shuǐ jīng",
-                english: "Amethyst Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "紫色的石英变种。",
-                descriptionEn: "Purple variety of quartz."
-            },
-            { 
-                chinese: "石榴石", 
-                pinyin: "shí liú shí",
-                english: "Garnet Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "深红色宝石。",
-                descriptionEn: "Deep red gemstone."
-            },
-            { 
-                chinese: "月长石", 
-                pinyin: "yuè cháng shí",
-                english: "Moonstone Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "有月光般光泽的宝石。",
-                descriptionEn: "Gemstone with a moon-like glow."
-            },
-            { 
-                chinese: "黄玉", 
-                pinyin: "huáng yù",
-                english: "Topaz Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "多种颜色的宝石。",
-                descriptionEn: "Gemstone available in various colors."
-            },
-            { 
-                chinese: "欧泊", 
-                pinyin: "ōu pò",
-                english: "Opal Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "有彩虹色变彩的宝石。",
-                descriptionEn: "Gemstone with rainbow-like color play."
-            },
-            { 
-                chinese: "海蓝宝石", 
-                pinyin: "hǎi lán bǎo shí",
-                english: "Aquamarine", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "淡蓝色的绿柱石变种。",
-                descriptionEn: "Light blue variety of beryl."
-            },
-            { 
-                chinese: "祖母绿", 
-                pinyin: "zǔ mǔ lǜ",
-                english: "Emerald Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "绿色的珍贵宝石。",
-                descriptionEn: "Green precious gemstone."
-            },
-            { 
-                chinese: "蓝宝石", 
-                pinyin: "lán bǎo shí",
-                english: "Sapphire Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "蓝色的刚玉宝石。",
-                descriptionEn: "Blue corundum gemstone."
-            },
-            { 
-                chinese: "红宝石", 
-                pinyin: "hóng bǎo shí",
-                english: "Ruby Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "红色的刚玉宝石。",
-                descriptionEn: "Red corundum gemstone."
-            },
-            { 
-                chinese: "钻石", 
-                pinyin: "zuàn shí",
-                english: "Diamond Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "最坚硬的天然矿物。",
-                descriptionEn: "The hardest natural mineral."
-            },
-            { 
-                chinese: "坦桑石", 
-                pinyin: "tǎn sāng shí",
-                english: "Tanzanite Gemstone", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "蓝紫色的稀有宝石。",
-                descriptionEn: "Blue-purple rare gemstone."
-            },
-            { 
-                chinese: "碧玺", 
-                pinyin: "bì xǐ",
-                english: "Tourmaline", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "有多种颜色的宝石。",
-                descriptionEn: "Gemstone available in many colors."
-            },
-            { 
-                chinese: "亚历山大石", 
-                pinyin: "yà lì shān dà shí",
-                english: "Alexandrite", 
-                category: "resources", 
-                icon: "fas fa-gem", 
-                description: "变色效应显著的稀有宝石。",
-                descriptionEn: "Rare gemstone with significant color-changing effects."
-            },
-            
-            // 从原文档添加的其他重要词汇
-            { 
-                chinese: "每日好运值 / 天气影响", 
-                pinyin: "měi rì hǎo yùn zhí / tiān qì yǐng xiǎng",
-                english: "Daily Luck / Weather Effects", 
-                category: "mechanics", 
-                icon: "fas fa-cloud-sun", 
-                description: "影响游戏事件概率的每日随机值。",
-                descriptionEn: "Daily random value that affects the probability of game events."
-            },
-            { 
-                chinese: "季节切换机制", 
-                pinyin: "jì jié qiē huàn jī zhì",
-                english: "Season Cycle", 
-                category: "mechanics", 
-                icon: "fas fa-calendar-alt", 
-                description: "游戏中的季节变化系统，影响可种植作物和活动。",
-                descriptionEn: "Seasonal change system in the game that affects plantable crops and activities."
-            },
-            { 
-                chinese: "持久度 / 工具耐久（若有）", 
-                pinyin: "chí jiǔ dù / gōng jù nài jiǔ (ruò yǒu)",
-                english: "Durability (if applicable)", 
-                category: "mechanics", 
-                icon: "fas fa-shield-alt", 
-                description: "工具和物品的使用寿命。",
-                descriptionEn: "The lifespan of tools and items."
-            },
-            { 
-                chinese: "经验值（技能升级）", 
-                pinyin: "jīng yàn zhí (jì néng shēng jí)",
-                english: "Experience Points (Skill Progression)", 
-                category: "mechanics", 
-                icon: "fas fa-chart-line", 
-                description: "通过活动获得的点数，用于提升技能等级。",
-                descriptionEn: "Points earned through activities, used to increase skill levels."
-            },
-            { 
-                chinese: "存档 / 多存档管理", 
-                pinyin: "cún dàng / duō cún dàng guǎn lǐ",
-                english: "Save / Save Slots", 
-                category: "mechanics", 
-                icon: "fas fa-save", 
-                description: "游戏进度保存系统。",
-                descriptionEn: "Game progress save system."
-            },
-            { 
-                chinese: "怪物种类（史莱姆、骷髅等）", 
-                pinyin: "guài wù zhǒng lèi (shǐ lái mǔ, kū lóu děng)",
-                english: "Monster Types (Slimes, Skeletons, etc.)", 
-                category: "combat", 
-                icon: "fas fa-ghost", 
-                description: "游戏中出现的敌对生物种类。",
-                descriptionEn: "Types of hostile creatures that appear in the game."
-            },
-            { 
-                chinese: "头目 / 地下城boss", 
-                pinyin: "tóu mù / dì xià chéng boss",
-                english: "Bosses / Dungeon Boss", 
-                category: "combat", 
-                icon: "fas fa-crown", 
-                description: "地下城中的强大敌人，通常需要特殊策略击败。",
-                descriptionEn: "Powerful enemies in dungeons that usually require special strategies to defeat."
             }
         ];
 
@@ -1806,8 +1836,9 @@
                             categorySection.innerHTML = `
                                 <h2 class="category-title">
                                     <i class="${categoryInfo[cat].icon}"></i>
-                                    ${categoryInfo[cat].title} (${categoryEntries.length})
+                                    ${categoryInfo[cat].title}
                                 </h2>
+                                <div class="category-count">${categoryEntries.length}</div>
                             `;
                             container.appendChild(categorySection);
                             
@@ -1825,8 +1856,9 @@
                     categorySection.innerHTML = `
                         <h2 class="category-title">
                             <i class="${categoryInfo[category].icon}"></i>
-                            ${categoryInfo[category].title} (${filteredData.length})
+                            ${categoryInfo[category].title}
                         </h2>
+                        <div class="category-count">${filteredData.length}</div>
                     `;
                     container.appendChild(categorySection);
                     
